@@ -19,780 +19,136 @@
             overflow: hidden; 
         }
 
-        .slide-container {
-            width: 100%;
-            height: 100vh;
-            position: relative;
-            overflow: hidden;
-        }
+        /* --- CSS CHUNG --- */
+        .slide-container { width: 100%; height: 100vh; position: relative; overflow: hidden; }
+        .slide { width: 100%; height: 100%; position: absolute; top: 0; left: 0; padding: 100px 40px 80px 40px; box-sizing: border-box; opacity: 0; transform: translateX(100%); transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; overflow-y: auto; }
+        .slide.active { opacity: 1; transform: translateX(0); }
+        .slide.prev { transform: translateX(-100%); }
+        .slide-header { text-align: center; margin-bottom: 30px; animation: slideDown 0.8s ease-out; flex-shrink: 0; }
+        .slide-title { font-size: 2.2rem; font-weight: 700; color: #2c3e50; margin: 0 0 10px 0; text-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .slide-subtitle { font-size: 1.1rem; color: #7f8c8d; margin: 0; }
+        
+        /* Navigation & Logo */
+        .navigation { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 12px; z-index: 1000; background: rgba(255,255,255,0.9); padding: 12px 20px; border-radius: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.12); backdrop-filter: blur(10px); }
+        .nav-btn { padding: 10px 24px; border: none; border-radius: 20px; background: #3498db; color: white; font-weight: 600; cursor: pointer; transition: all 0.3s ease; font-size: 0.9rem; min-width: 80px; display: flex; align-items: center; justify-content: center; }
+        .nav-btn:hover { background: #2980b9; transform: translateY(-2px); }
+        .nav-btn:disabled { background: #bdc3c7; cursor: not-allowed; transform: none; }
+        .slide-indicator { position: fixed; top: 30px; right: 30px; background: rgba(255,255,255,0.95); padding: 10px 20px; border-radius: 25px; font-weight: 600; color: #2c3e50; z-index: 1000; backdrop-filter: blur(10px); box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .kiotviet-logo { position: fixed; top: 30px; left: 30px; z-index: 1000; background: rgba(255,255,255,0.95); padding: 10px 15px; border-radius: 12px; backdrop-filter: blur(10px); box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+        .kiotviet-logo img { height: 40px; width: auto; }
 
-        .slide {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            padding: 100px 40px 80px 40px; 
-            box-sizing: border-box;
-            opacity: 0;
-            transform: translateX(100%);
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto; 
-        }
+        /* Slide 1 - Title */
+        .title-slide { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; text-align: center; position: relative; z-index: 2; margin-top: -60px; }
+        .main-title h1 { font-size: 3.5rem; font-weight: 800; color: #2c3e50; margin: 0 0 20px 0; text-shadow: 0 4px 8px rgba(0,0,0,0.1); animation: titleSlideIn 1s ease-out; }
+        .year-badge { display: inline-block; background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 10px 30px; border-radius: 50px; font-size: 2.5rem; font-weight: 700; box-shadow: 0 8px 32px rgba(52, 152, 219, 0.3); animation: titleSlideIn 1s ease-out 0.4s both; margin-bottom: 30px; }
+        .presenter-info { margin-top: 30px; animation: titleSlideIn 1s ease-out 0.6s both; background: rgba(255, 255, 255, 0.6); padding: 20px 40px; border-radius: 20px; backdrop-filter: blur(5px); }
+        .presenter-name { font-size: 1.5rem; color: #2c3e50; font-weight: 700; margin-bottom: 5px; }
+        .department-name { font-size: 1.2rem; color: #7f8c8d; font-weight: 500; }
+        .data-note { position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%); font-size: 0.9rem; color: #95a5a6; animation: fadeIn 1s ease-out 1s both; }
 
-        .slide.active {
-            opacity: 1;
-            transform: translateX(0);
-        }
+        /* Slide 2 - Overview */
+        .overview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 20px; flex-shrink: 0; }
+        .stat-card { background: white; border-radius: 16px; padding: 25px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: visible; animation: slideInUp 0.6s ease-out; animation-fill-mode: both; text-align: center; }
+        .stat-card:hover { transform: translateY(-8px); box-shadow: 0 16px 48px rgba(0,0,0,0.15); z-index: 10; }
+        .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--card-color); border-radius: 16px 16px 0 0; }
+        .stat-card.primary { --card-color: #3498db; } .stat-card.success { --card-color: #27ae60; } .stat-card.warning { --card-color: #f39c12; } .stat-card.info { --card-color: #9b59b6; }
+        .stat-icon { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; background: var(--card-color); margin: 0 auto 15px auto; animation: pulse 2s infinite; }
+        .stat-value { font-size: 2.2rem; font-weight: 700; color: var(--card-color); margin: 5px 0; }
+        .stat-label { font-size: 1rem; font-weight: 600; color: #7f8c8d; margin: 0; }
+        .chart-container { background: white; border-radius: 16px; padding: 20px 30px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); margin-top: 10px; animation: fadeIn 0.8s ease-out 0.5s both; flex-grow: 1; display: flex; flex-direction: column; overflow: visible; }
+        .chart-title { font-size: 1.2rem; font-weight: 600; color: #2c3e50; margin-bottom: 15px; text-align: center; }
+        .monthly-chart { display: grid; grid-template-columns: repeat(12, 1fr); gap: 10px; height: 100%; min-height: 200px; align-items: end; padding-bottom: 20px; position: relative; overflow: visible; }
+        
+        /* Product Slides */
+        .product-slide { display: grid; grid-template-rows: auto 1fr; gap: 20px; height: 100%; }
+        .product-header { text-align: center; padding: 20px 40px; background: white; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; gap: 25px; }
+        .product-header::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px; background: var(--product-color); }
+        .product-icon { font-size: 3.5rem; line-height: 1; flex-shrink: 0; }
+        .product-header-text { max-width: 800px; text-align: left; }
+        .product-title { font-size: 1.8rem; font-weight: 700; color: var(--product-color); margin: 0 0 5px 0; line-height: 1.2; }
+        .product-content { display: grid; grid-template-columns: 1fr 1.2fr; gap: 25px; overflow-y: auto; padding: 5px; }
+        .metrics-card, .analysis-card { background: white; border-radius: 16px; padding: 25px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); animation: slideInUp 0.6s ease-out 0.3s both; display: flex; flex-direction: column; overflow: visible; position: relative; z-index: 5; }
+        .card-title { font-size: 1.2rem; font-weight: 600; color: #2c3e50; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; gap: 10px; border-bottom: 2px solid #f1f2f6; padding-bottom: 10px; }
 
-        .slide.prev {
-            transform: translateX(-100%);
-        }
-
-        .slide-header {
-            text-align: center;
-            margin-bottom: 30px;
-            animation: slideDown 0.8s ease-out;
-            flex-shrink: 0;
-        }
-
-        .slide-title {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: #2c3e50;
-            margin: 0 0 10px 0;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .slide-subtitle {
-            font-size: 1.1rem;
-            color: #7f8c8d;
-            margin: 0;
-        }
-
-        .navigation {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 12px;
-            z-index: 1000;
-            background: rgba(255,255,255,0.9);
-            padding: 12px 20px;
-            border-radius: 30px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.12);
-            backdrop-filter: blur(10px);
-        }
-
-        .nav-btn {
-            padding: 10px 24px;
-            border: none;
-            border-radius: 20px;
-            background: #3498db;
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-            min-width: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .nav-btn:hover {
-            background: #2980b9;
-            transform: translateY(-2px);
-        }
-
-        .nav-btn:disabled {
-            background: #bdc3c7;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .slide-indicator {
-            position: fixed;
-            top: 30px;
-            right: 30px;
-            background: rgba(255,255,255,0.95);
-            padding: 10px 20px;
-            border-radius: 25px;
-            font-weight: 600;
-            color: #2c3e50;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .kiotviet-logo {
-            position: fixed;
-            top: 30px;
-            left: 30px;
-            z-index: 1000;
-            background: rgba(255,255,255,0.95);
-            padding: 10px 15px;
-            border-radius: 12px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-        }
-
-        .kiotviet-logo img {
-            height: 40px;
-            width: auto;
-        }
-
-        /* Slide 1 - Overview */
-        .overview-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 20px;
-            flex-shrink: 0;
-        }
-
-        .stat-card {
-            background: white;
-            border-radius: 16px;
-            padding: 25px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: visible; 
-            animation: slideInUp 0.6s ease-out;
-            animation-fill-mode: both;
-            text-align: center;
-        }
-
-        .stat-card:nth-child(1) { animation-delay: 0.1s; }
-        .stat-card:nth-child(2) { animation-delay: 0.2s; }
-        .stat-card:nth-child(3) { animation-delay: 0.3s; }
-        .stat-card:nth-child(4) { animation-delay: 0.4s; }
-
-        .stat-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 16px 48px rgba(0,0,0,0.15);
-            z-index: 10;
-        }
-
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--card-color);
-            border-radius: 16px 16px 0 0;
-        }
-
-        .stat-card.primary { --card-color: #3498db; }
-        .stat-card.success { --card-color: #27ae60; }
-        .stat-card.warning { --card-color: #f39c12; }
-        .stat-card.info { --card-color: #9b59b6; }
-
-        .stat-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: white;
-            background: var(--card-color);
-            margin: 0 auto 15px auto;
-            animation: pulse 2s infinite;
-        }
-
-        .stat-value {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: var(--card-color);
-            margin: 5px 0;
-        }
-
-        .stat-label {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #7f8c8d;
-            margin: 0;
-        }
-
-        .chart-container {
-            background: white;
-            border-radius: 16px;
-            padding: 20px 30px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            margin-top: 10px;
-            animation: fadeIn 0.8s ease-out 0.5s both;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            overflow: visible; 
-        }
-
-        .chart-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #2c3e50;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        .monthly-chart {
-            display: grid;
-            grid-template-columns: repeat(12, 1fr);
-            gap: 10px;
-            height: 100%;
-            min-height: 200px;
-            align-items: end;
-            padding-bottom: 20px;
-            position: relative;
-            overflow: visible;
+        /* Chart & Filter Styles */
+        .mini-product-chart { display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px; height: 180px; align-items: end; padding-bottom: 25px; position: relative; margin-bottom: 20px; border-bottom: 1px dashed #eee; overflow: visible; }
+        .month-bar { background: linear-gradient(135deg, #3498db 0%, #5dade2 50%, #85c1e9 100%); border-radius: 6px 6px 0 0; position: relative; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); animation: growUp 1.2s ease-out; animation-fill-mode: both; box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2); cursor: pointer; min-height: 10px; }
+        .month-bar.highlight-bar { background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%); box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3); }
+        .month-bar:hover { transform: scale(1.05) translateY(-5px); filter: brightness(1.1); z-index: 50; }
+        .month-label { position: absolute; bottom: -25px; left: 50%; transform: translateX(-50%); font-size: 0.75rem; color: #7f8c8d; font-weight: 600; }
+        
+        /* Empty Bar Style for Missing Data */
+        .month-bar.empty-data {
+            background: none !important;
+            border: 1px dashed #bdc3c7;
+            box-shadow: none;
+            height: 0% !important; /* Mặc định là thấp */
+            min-height: 10px; /* Vẫn hiện 1 chút để click */
         }
         
-        .mini-product-chart {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr); 
-            gap: 15px;
-            height: 180px; 
-            align-items: end;
-            padding-bottom: 25px;
-            position: relative;
-            margin-bottom: 20px;
-            border-bottom: 1px dashed #eee;
-            overflow: visible; 
-        }
-
-        .month-bar {
-            background: linear-gradient(135deg, #3498db 0%, #5dade2 50%, #85c1e9 100%);
-            border-radius: 6px 6px 0 0;
-            position: relative;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            animation: growUp 1.2s ease-out;
-            animation-fill-mode: both;
-            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
-            cursor: pointer;
-            min-height: 10px;
-        }
+        .month-bar.dimmed { opacity: 0.2 !important; filter: grayscale(100%); transform: scale(1) !important; cursor: default; }
         
-        .month-bar.highlight-bar {
-            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
-            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
-        }
+        /* Filter Dropdown */
+        .month-filter { padding: 5px 10px; border-radius: 8px; border: 1px solid #dcdde1; font-size: 0.9rem; color: #2c3e50; background-color: #f8f9fa; cursor: pointer; outline: none; font-family: 'Inter', sans-serif; transition: all 0.2s; }
+        .month-filter:hover, .month-filter:focus { border-color: #3498db; box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2); }
 
-        .month-bar:hover {
-            transform: scale(1.05) translateY(-5px);
-            filter: brightness(1.1);
-            z-index: 50; 
-        }
+        /* Tooltip Charts */
+        .month-tooltip { position: absolute; bottom: 115%; left: 50%; transform: translateX(-50%); background: rgba(255, 255, 255, 0.98); color: #2c3e50; padding: 12px 16px; border-radius: 10px; font-size: 0.85rem; font-weight: 500; opacity: 0; visibility: hidden; transition: all 0.2s ease; white-space: normal; text-align: left; line-height: 1.5; z-index: 10000; box-shadow: 0 10px 30px rgba(0,0,0,0.2); border: 1px solid #bdc3c7; backdrop-filter: blur(8px); width: max-content; max-width: 250px; text-shadow: none; pointer-events: none; }
+        .month-tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 7px solid transparent; border-top-color: #bdc3c7; }
+        .month-bar:hover .month-tooltip { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(-8px); }
+        .tooltip-title { display: block; border-bottom: 1px solid #e0e0e0; padding-bottom: 5px; margin-bottom: 5px; font-weight: 800; color: #2980b9; text-align: center; }
+        .tooltip-row { display: flex; justify-content: space-between; gap: 20px; color: #34495e; margin-bottom: 3px; }
+        .tooltip-highlight { color: #27ae60; font-weight: 800; margin-top: 6px; border-top: 1px dashed #e0e0e0; padding-top: 5px; display: block; text-align: center; background: rgba(39, 174, 96, 0.1); border-radius: 4px; padding: 4px; }
 
-        .month-label {
-            position: absolute;
-            bottom: -25px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 0.75rem;
-            color: #7f8c8d;
-            font-weight: 600;
-        }
+        /* Mini Stats with Explanation Tooltip */
+        .mini-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: auto; }
+        .mini-stat { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 12px 5px; background: #f8f9fa; border-radius: 8px; text-align: center; border: 1px solid #edf2f7; position: relative; cursor: help; transition: all 0.2s; }
+        .mini-stat:hover { background: #eef2f7; border-color: #cbd5e0; }
+        .mini-stat-value { font-size: 1.2rem; font-weight: 700; color: var(--product-color); line-height: 1.2; }
+        .mini-stat-label { font-size: 0.7rem; color: #7f8c8d; font-weight: 500; margin-top: 4px; }
+        .stat-explanation-tooltip { position: absolute; bottom: 110%; left: 50%; transform: translateX(-50%); width: 200px; background: #2c3e50; color: #fff; padding: 10px; border-radius: 8px; font-size: 0.8rem; text-align: center; opacity: 0; visibility: hidden; transition: all 0.2s ease-in-out; z-index: 100; box-shadow: 0 4px 15px rgba(0,0,0,0.2); font-weight: 400; line-height: 1.4; pointer-events: none; }
+        .stat-explanation-tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: #2c3e50 transparent transparent transparent; }
+        .mini-stat:hover .stat-explanation-tooltip { opacity: 1; visibility: visible; bottom: 120%; }
 
-        /* Tooltip Styling */
-        .month-tooltip {
-            position: absolute;
-            bottom: 115%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.98);
-            color: #2c3e50;
-            padding: 12px 16px;
-            border-radius: 10px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.2s ease;
-            white-space: normal;
-            text-align: left;
-            line-height: 1.5;
-            z-index: 10000; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            border: 1px solid #bdc3c7;
-            backdrop-filter: blur(8px);
-            width: max-content;
-            max-width: 250px;
-            text-shadow: none;
-            pointer-events: none;
-        }
-        
-        .month-tooltip::after {
-            content: '';
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            border: 7px solid transparent;
-            border-top-color: #bdc3c7;
-        }
-        
-        .month-tooltip::before {
-            content: '';
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            border: 6px solid transparent;
-            border-top-color: #fff; 
-            z-index: 1;
-            margin-top: -1px;
-        }
+        /* Insights */
+        .insights { display: flex; flex-direction: column; gap: 12px; flex-grow: 1; }
+        .insight-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 15px; border-radius: 8px; font-size: 0.95rem; font-weight: 500; line-height: 1.5; }
+        .insight-item.positive { background: rgba(39, 174, 96, 0.08); color: #219150; border-left: 4px solid #27ae60; }
+        .insight-item.neutral { background: rgba(52, 152, 219, 0.08); color: #2980b9; border-left: 4px solid #3498db; }
+        .insight-item.negative { background: rgba(231, 76, 60, 0.08); color: #c0392b; border-left: 4px solid #e74c3c; }
+        .insight-icon { font-size: 1.2rem; margin-top: 1px; flex-shrink: 0; }
 
-        .month-bar:hover .month-tooltip {
-            opacity: 1;
-            visibility: visible;
-            transform: translateX(-50%) translateY(-8px);
-        }
-        
-        .tooltip-title {
-            display: block;
-            border-bottom: 1px solid #e0e0e0;
-            padding-bottom: 5px;
-            margin-bottom: 5px;
-            font-weight: 800;
-            color: #2980b9; 
-            text-align: center;
-        }
-        
-        .tooltip-row {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-            color: #34495e;
-            margin-bottom: 3px;
-        }
-        
-        .tooltip-highlight {
-            color: #27ae60;
-            font-weight: 800;
-            margin-top: 6px;
-            border-top: 1px dashed #e0e0e0;
-            padding-top: 5px;
-            display: block;
-            text-align: center;
-            background: rgba(39, 174, 96, 0.1);
-            border-radius: 4px;
-            padding: 4px;
-        }
+        /* Slide 8 Summary Fixes */
+        .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; flex: 1; overflow-y: auto; }
+        .achievement-card, .improvement-card { background: white; border-radius: 16px; padding: 25px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); animation: slideInUp 0.6s ease-out; display: flex; flex-direction: column; }
+        .achievement-card { border-left: 6px solid #27ae60; animation-delay: 0.2s; }
+        .improvement-card { border-left: 6px solid #e74c3c; animation-delay: 0.4s; }
+        /* FIXED: List Item Styling for Slide 8 */
+        .list-item { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px; padding: 12px; background: #f8f9fa; border-radius: 8px; transition: all 0.3s ease; font-size: 0.95rem; list-style: none; /* Removed default dots */ }
+        .list-item:hover { background: #e9ecef; transform: translateX(5px); }
+        .list-icon { margin-top: 2px; flex-shrink: 0; } /* FIXED: Aligned icon with text */
+        .list-item strong { display: block; margin-bottom: 6px; color: #2c3e50; font-size: 1rem; }
+        .list-item ul { margin: 0; padding-left: 20px; list-style-type: disc; color: #576574; }
+        .list-item li { margin-bottom: 4px; line-height: 1.4; }
 
-        /* Product Analysis */
-        .product-slide {
-            display: grid;
-            grid-template-rows: auto 1fr;
-            gap: 20px;
-            height: 100%;
-        }
+        /* Other Slides */
+        .nextstep-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; flex: 1; overflow-y: auto; padding-bottom: 60px; }
+        .step-card { background: white; border-radius: 16px; padding: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); position: relative; overflow: hidden; animation: slideInUp 0.6s ease-out; animation-fill-mode: both; }
+        .step-card:nth-child(1) { animation-delay: 0.1s; --step-color: #3498db; } .step-card:nth-child(2) { animation-delay: 0.2s; --step-color: #e67e22; } .step-card:nth-child(3) { animation-delay: 0.3s; --step-color: #9b59b6; } .step-card:nth-child(4) { animation-delay: 0.4s; --step-color: #34495e; }
+        .step-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--step-color); }
+        .step-header { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
+        .step-icon { width: 40px; height: 40px; border-radius: 50%; background: var(--step-color); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        .step-title { font-size: 1.1rem; font-weight: 600; color: #2c3e50; margin: 0; }
+        .step-list { list-style: none; padding: 0; margin: 0; }
+        .step-list li { padding: 6px 0; position: relative; padding-left: 20px; font-size: 0.9rem; color: #576574; }
+        .step-list li::before { content: '→'; position: absolute; left: 0; color: var(--step-color); font-weight: bold; }
 
-        .product-header {
-            text-align: center; 
-            padding: 20px 40px;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            align-items: center; 
-            justify-content: center; 
-            gap: 25px;
-        }
-
-        .product-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 6px;
-            background: var(--product-color);
-        }
-
-        .product-icon {
-            font-size: 3.5rem;
-            line-height: 1;
-            flex-shrink: 0;
-        }
-        
-        .product-header-text {
-            max-width: 800px;
-            text-align: left;
-        }
-
-        .product-title {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--product-color);
-            margin: 0 0 5px 0;
-            line-height: 1.2;
-        }
-
-        .product-content {
-            display: grid;
-            grid-template-columns: 1fr 1.2fr;
-            gap: 25px;
-            overflow-y: auto;
-            padding: 5px; 
-        }
-
-        .metrics-card, .analysis-card {
-            background: white;
-            border-radius: 16px;
-            padding: 25px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            animation: slideInUp 0.6s ease-out 0.3s both;
-            display: flex;
-            flex-direction: column;
-            overflow: visible; 
-            position: relative;
-            z-index: 5; 
-        }
-
-        .card-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #2c3e50;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border-bottom: 2px solid #f1f2f6;
-            padding-bottom: 10px;
-        }
-
-        .mini-stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr); 
-            gap: 8px;
-            margin-top: auto;
-        }
-
-        .mini-stat {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 12px 5px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            text-align: center;
-            border: 1px solid #edf2f7;
-        }
-
-        .mini-stat-value {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--product-color);
-            line-height: 1.2;
-        }
-
-        .mini-stat-label {
-            font-size: 0.7rem;
-            color: #7f8c8d;
-            font-weight: 500;
-            margin-top: 4px;
-        }
-        
-        .insights {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            flex-grow: 1;
-        }
-
-        .insight-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 12px 15px;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            font-weight: 500;
-            line-height: 1.5;
-        }
-
-        .insight-item.positive {
-            background: rgba(39, 174, 96, 0.08);
-            color: #219150;
-            border-left: 4px solid #27ae60;
-        }
-
-        .insight-item.neutral {
-            background: rgba(52, 152, 219, 0.08);
-            color: #2980b9;
-            border-left: 4px solid #3498db;
-        }
-
-        .insight-item.negative {
-            background: rgba(231, 76, 60, 0.08);
-            color: #c0392b;
-            border-left: 4px solid #e74c3c;
-        }
-        
-        .insight-icon {
-            font-size: 1.2rem;
-            margin-top: 1px;
-            flex-shrink: 0;
-        }
-
-        /* Slide 7 - Summary */
-        .summary-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-            flex: 1;
-            overflow-y: auto;
-        }
-
-        .achievement-card, .improvement-card {
-            background: white;
-            border-radius: 16px;
-            padding: 25px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            animation: slideInUp 0.6s ease-out;
-            /* FIX: Remove height fit-content to allow stretching */
-            display: flex;
-            flex-direction: column;
-        }
-
-        .achievement-card {
-            border-left: 6px solid #27ae60;
-            animation-delay: 0.2s;
-        }
-
-        .improvement-card {
-            border-left: 6px solid #e74c3c;
-            animation-delay: 0.4s;
-        }
-
-        .list-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            margin-bottom: 12px;
-            padding: 12px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            font-size: 0.95rem;
-        }
-
-        .list-item:hover {
-            background: #e9ecef;
-            transform: translateX(5px);
-        }
-        
-        .list-item strong {
-            display: block;
-            margin-bottom: 6px;
-            color: #2c3e50;
-            font-size: 1rem;
-        }
-        
-        .list-item ul {
-            margin: 0;
-            padding-left: 20px;
-            list-style-type: disc;
-            color: #576574;
-        }
-        
-        .list-item li {
-            margin-bottom: 4px;
-            line-height: 1.4;
-        }
-
-        /* Slide 8 - Next Steps */
-        .nextstep-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            flex: 1;
-            overflow-y: auto;
-            padding-bottom: 60px;
-        }
-
-        .step-card {
-            background: white;
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            position: relative;
-            overflow: hidden;
-            animation: slideInUp 0.6s ease-out;
-            animation-fill-mode: both;
-        }
-
-        .step-card:nth-child(1) { animation-delay: 0.1s; --step-color: #3498db; }
-        .step-card:nth-child(2) { animation-delay: 0.2s; --step-color: #e67e22; }
-        .step-card:nth-child(3) { animation-delay: 0.3s; --step-color: #9b59b6; }
-        .step-card:nth-child(4) { animation-delay: 0.4s; --step-color: #34495e; }
-
-        .step-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--step-color);
-        }
-
-        .step-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 15px;
-        }
-
-        .step-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--step-color);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-        }
-
-        .step-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #2c3e50;
-            margin: 0;
-        }
-
-        .step-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .step-list li {
-            padding: 6px 0;
-            position: relative;
-            padding-left: 20px;
-            font-size: 0.9rem;
-            color: #576574;
-        }
-
-        .step-list li::before {
-            content: '→';
-            position: absolute;
-            left: 0;
-            color: var(--step-color);
-            font-weight: bold;
-        }
-
-        /* Title Slide Styles */
-        .title-slide {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-            text-align: center;
-            position: relative;
-            z-index: 2;
-            margin-top: -60px; 
-        }
-
-        .main-title h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
-            color: #2c3e50;
-            margin: 0 0 20px 0;
-            text-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            animation: titleSlideIn 1s ease-out;
-        }
-
-        .year-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #3498db, #2980b9);
-            color: white;
-            padding: 10px 30px;
-            border-radius: 50px;
-            font-size: 2.5rem;
-            font-weight: 700;
-            box-shadow: 0 8px 32px rgba(52, 152, 219, 0.3);
-            animation: titleSlideIn 1s ease-out 0.4s both;
-            margin-bottom: 30px;
-        }
-
-        .presenter-info {
-            margin-top: 30px;
-            animation: titleSlideIn 1s ease-out 0.6s both;
-            background: rgba(255, 255, 255, 0.6);
-            padding: 20px 40px;
-            border-radius: 20px;
-            backdrop-filter: blur(5px);
-        }
-
-        .presenter-name {
-            font-size: 1.5rem;
-            color: #2c3e50;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-
-        .department-name {
-            font-size: 1.2rem;
-            color: #7f8c8d;
-            font-weight: 500;
-        }
-
-        .data-note {
-            position: absolute;
-            bottom: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 0.9rem;
-            color: #95a5a6;
-            animation: fadeIn 1s ease-out 1s both;
-        }
-
-        @keyframes titleSlideIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes slideInUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        @keyframes growUp {
-            from { height: 0; opacity: 0; }
-            to { opacity: 1; }
-        }
+        @keyframes titleSlideIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        @keyframes growUp { from { height: 0; opacity: 0; } to { opacity: 1; } }
 
         @media (max-width: 768px) {
             .slide { padding: 80px 20px 20px 20px; overflow-y: scroll; }
@@ -806,11 +162,14 @@
     </style>
  </head>
  <body>
-  <div class="slide-container"><!-- KiotViet Logo -->
+  <div class="slide-container">
+   <!-- KiotViet Logo -->
    <div class="kiotviet-logo"><img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg" alt="KiotViet Logo" onerror="this.style.display='none'; this.parentElement.innerText='KiotViet'">
-   </div><!-- Slide Indicator -->
+   </div>
+   <!-- Slide Indicator -->
    <div class="slide-indicator"><span id="current-slide">1</span> / <span id="total-slides">10</span>
-   </div><!-- Slide 1: Title Slide -->
+   </div>
+   <!-- Slide 1: Title Slide -->
    <div class="slide active" id="slide-1">
     <div class="title-slide">
      <div class="main-title">
@@ -827,10 +186,11 @@
        Phòng Đào tạo
       </div>
      </div>
-     <div class="data-note"><em>Dữ liệu cập nhật đến ngày 28/11/2025</em>
+     <div class="data-note"><em>Dữ liệu cập nhật đến ngày 27/11/2025</em>
      </div>
     </div>
-   </div><!-- Slide 2: Overview -->
+   </div>
+   <!-- Slide 2: Overview -->
    <div class="slide" id="slide-2">
     <div class="slide-header">
      <h1 class="slide-title">I. Tổng Quan Hoạt Động Đào Tạo</h1>
@@ -876,7 +236,8 @@
     </div>
     <div class="chart-container">
      <h3 class="chart-title">Phân bổ lớp học theo tháng (Tập trung Quý 3 &amp; 4)</h3>
-     <div class="monthly-chart"><!-- Dummy data for first half of year -->
+     <div class="monthly-chart">
+      <!-- Dummy data for first half of year -->
       <div class="month-bar" style="height: 5%; opacity: 0.3;" data-delay="0.1s"><span class="month-label">T1</span>
       </div>
       <div class="month-bar" style="height: 5%; opacity: 0.3;" data-delay="0.1s"><span class="month-label">T2</span>
@@ -888,7 +249,8 @@
       <div class="month-bar" style="height: 5%; opacity: 0.3;" data-delay="0.1s"><span class="month-label">T5</span>
       </div>
       <div class="month-bar" style="height: 5%; opacity: 0.3;" data-delay="0.1s"><span class="month-label">T6</span>
-      </div><!-- Real Data Jul - Nov -->
+      </div>
+      <!-- Real Data Jul - Nov -->
       <div class="month-bar highlight-bar" style="height: 70%;" data-delay="0.2s"><span class="month-label">T7</span>
        <div class="month-tooltip">
         Tháng 7: 5 lớp<br>(Retail: 4, FNB HW: 1)
@@ -921,7 +283,8 @@
       </div>
      </div>
     </div>
-   </div><!-- Slide 3: KiotViet Retail -->
+   </div>
+   <!-- Slide 3: KiotViet Retail -->
    <div class="slide" id="slide-3">
     <div class="product-slide" style="--product-color: #3498db;">
      <div class="product-header"><span class="product-icon">🛍️</span>
@@ -932,120 +295,75 @@
      </div>
      <div class="product-content">
       <div class="metrics-card">
-       <h3 class="card-title">📊 Thống Kê Chi Tiết</h3>
-       <!-- REPLACED PROGRESS BAR WITH CHART -->
+       <div class="card-title">
+           <span>📊 Thống Kê Chi Tiết</span>
+           <!-- BỘ LỌC ĐỦ THÁNG -->
+           <select class="month-filter" onchange="filterData('retail', this.value)">
+               <option value="all">Tất cả (T7-T11)</option>
+               <option value="7">Tháng 7</option>
+               <option value="8">Tháng 8</option>
+               <option value="9">Tháng 9</option>
+               <option value="10">Tháng 10</option>
+               <option value="11">Tháng 11</option>
+           </select>
+       </div>
        <p style="text-align: center; color: #7f8c8d; font-size: 0.9rem; margin-bottom: 10px;">Biểu đồ quy mô lớp học (Theo số lượng HV)</p>
-       <div class="mini-product-chart">
-           <!-- T7: 146 Students (MAX) -->
-           <div class="month-bar" style="height: 100%; background: #3498db;" data-delay="0.1s">
-               <span class="month-label">T7</span>
-               <div class="month-tooltip">
-                   <span class="tooltip-title">Tháng 7 (146 HV)</span>
-                   <div class="tooltip-row"><span>• 25KV24:</span> <b>39 HV</b></div>
-                   <div class="tooltip-row"><span>• 25KV25:</span> <b>37 HV</b></div>
-                   <div class="tooltip-row"><span>• 25KV26:</span> <b>47 HV</b></div>
-                   <div class="tooltip-row"><span>• 25KV28:</span> <b>23 HV</b></div>
-                   <span class="tooltip-highlight">🏆 Tỉ lệ Pass tốt nhất: 25KV26</span>
-               </div>
+       <div class="mini-product-chart" id="chart-retail">
+           <div class="month-bar" style="height: 100%; background: #3498db;" data-month="7" data-delay="0.1s"><span class="month-label">T7</span>
+               <div class="month-tooltip"><span class="tooltip-title">Tháng 7 (146 HV)</span><div class="tooltip-row"><span>• 25KV24:</span> <b>39 HV</b></div><div class="tooltip-row"><span>• 25KV25:</span> <b>37 HV</b></div><div class="tooltip-row"><span>• 25KV26:</span> <b>47 HV</b></div><div class="tooltip-row"><span>• 25KV28:</span> <b>23 HV</b></div></div>
            </div>
-           <!-- T8: 55 Students -->
-           <div class="month-bar" style="height: 38%; background: #3498db;" data-delay="0.2s">
-               <span class="month-label">T8</span>
-               <div class="month-tooltip">
-                   <span class="tooltip-title">Tháng 8 (55 HV)</span>
-                   <div class="tooltip-row"><span>• 25KV31:</span> <b>33 HV</b></div>
-                   <div class="tooltip-row"><span>• 25KV32:</span> <b>22 HV</b></div>
-               </div>
+           <div class="month-bar" style="height: 38%; background: #3498db;" data-month="8" data-delay="0.2s"><span class="month-label">T8</span>
+               <div class="month-tooltip"><span class="tooltip-title">Tháng 8 (55 HV)</span><div class="tooltip-row"><span>• 25KV31:</span> <b>33 HV</b></div><div class="tooltip-row"><span>• 25KV32:</span> <b>22 HV</b></div></div>
            </div>
-           <!-- T9: 66 Students -->
-           <div class="month-bar" style="height: 45%; background: #3498db;" data-delay="0.3s">
-               <span class="month-label">T9</span>
-               <div class="month-tooltip">
-                   <span class="tooltip-title">Tháng 9 (66 HV)</span>
-                   <div class="tooltip-row"><span>• 25KV34:</span> <b>29 HV</b></div>
-                   <div class="tooltip-row"><span>• 25KV35:</span> <b>22 HV</b></div>
-                   <div class="tooltip-row"><span>• 25KV36:</span> <b>15 HV</b></div>
-               </div>
+           <div class="month-bar" style="height: 45%; background: #3498db;" data-month="9" data-delay="0.3s"><span class="month-label">T9</span>
+               <div class="month-tooltip"><span class="tooltip-title">Tháng 9 (66 HV)</span><div class="tooltip-row"><span>• 25KV34:</span> <b>29 HV</b></div><div class="tooltip-row"><span>• 25KV35:</span> <b>22 HV</b></div><div class="tooltip-row"><span>• 25KV36:</span> <b>15 HV</b></div></div>
            </div>
-           <!-- T10: 55 Students -->
-           <div class="month-bar" style="height: 38%; background: #3498db;" data-delay="0.4s">
-               <span class="month-label">T10</span>
-               <div class="month-tooltip">
-                   <span class="tooltip-title">Tháng 10 (55 HV)</span>
-                   <div class="tooltip-row"><span>• 25KV37:</span> <b>16 HV</b></div>
-                   <div class="tooltip-row"><span>• 25KV39:</span> <b>21 HV</b></div>
-                   <div class="tooltip-row"><span>• 25KV40:</span> <b>18 HV</b></div>
-               </div>
+           <div class="month-bar" style="height: 38%; background: #3498db;" data-month="10" data-delay="0.4s"><span class="month-label">T10</span>
+               <div class="month-tooltip"><span class="tooltip-title">Tháng 10 (55 HV)</span><div class="tooltip-row"><span>• 25KV37:</span> <b>16 HV</b></div><div class="tooltip-row"><span>• 25KV39:</span> <b>21 HV</b></div><div class="tooltip-row"><span>• 25KV40:</span> <b>18 HV</b></div></div>
            </div>
-           <!-- T11: 45 Students -->
-           <div class="month-bar" style="height: 30%; background: #3498db;" data-delay="0.5s">
-               <span class="month-label">T11</span>
-               <div class="month-tooltip">
-                   <span class="tooltip-title">Tháng 11 (45 HV)</span>
-                   <div class="tooltip-row"><span>• 25KV41:</span> <b>16 HV</b></div>
-                   <div class="tooltip-row"><span>• 25KV43:</span> <b>16 HV</b></div>
-                   <div class="tooltip-row"><span>• 25KV44:</span> <b>13 HV</b></div>
-                   <span class="tooltip-highlight">🏆 Tỉ lệ Pass tốt nhất: 25KV43</span>
-               </div>
+           <div class="month-bar" style="height: 30%; background: #3498db;" data-month="11" data-delay="0.5s"><span class="month-label">T11</span>
+               <div class="month-tooltip"><span class="tooltip-title">Tháng 11 (45 HV)</span><div class="tooltip-row"><span>• 25KV41:</span> <b>16 HV</b></div><div class="tooltip-row"><span>• 25KV43:</span> <b>16 HV</b></div><div class="tooltip-row"><span>• 25KV44:</span> <b>13 HV</b></div></div>
            </div>
-           <div class="month-bar" style="height: 0%; border: 1px dashed #ccc; background: none;">
-               <span class="month-label">T12</span>
-               <div class="month-tooltip">Chưa có dữ liệu</div>
-           </div>
+           <div class="month-bar empty-data"><span class="month-label">T12</span></div>
        </div>
 
-       <div class="mini-stats">
+       <div class="mini-stats" id="stats-retail">
         <div class="mini-stat">
-         <div class="mini-stat-value">
-          15
-         </div>
-         <div class="mini-stat-label">
-          Lớp học
-         </div>
+         <div class="mini-stat-value" id="retail-classes">15</div>
+         <div class="mini-stat-label">Lớp học</div>
+         <div class="stat-explanation-tooltip" id="retail-classes-note">Tổng số lớp từ T7-T11</div>
         </div>
         <div class="mini-stat">
-         <div class="mini-stat-value">
-          91%
-         </div>
-         <div class="mini-stat-label">
-          Điểm Test
-         </div>
+         <div class="mini-stat-value" id="retail-score">91%</div>
+         <div class="mini-stat-label">Điểm Test</div>
+         <div class="stat-explanation-tooltip" id="retail-score-note">Điểm trung bình các bài kiểm tra</div>
         </div>
         <div class="mini-stat">
-         <div class="mini-stat-value">
-          98%
-         </div>
-         <div class="mini-stat-label">
-          Tỷ lệ đạt
-         </div>
+         <div class="mini-stat-value" id="retail-pass">98%</div>
+         <div class="mini-stat-label">Tỷ lệ đạt</div>
+         <div class="stat-explanation-tooltip" id="retail-pass-note">Học viên đạt trên 80% điểm</div>
         </div>
-        <!-- ADDED SATISFACTION SCORE -->
         <div class="mini-stat">
-         <div class="mini-stat-value">
-          4.8/5
-         </div>
-         <div class="mini-stat-label">
-          Hài lòng
-         </div>
+         <div class="mini-stat-value" id="retail-sat">4.8/5</div>
+         <div class="mini-stat-label">Hài lòng</div>
+         <div class="stat-explanation-tooltip" id="retail-sat-note">Đánh giá sau khóa học</div>
         </div>
        </div>
       </div>
       <div class="analysis-card">
        <h3 class="card-title">🎯 Phân tích &amp; Insight</h3>
        <div class="insights">
-        <div class="insight-item positive"><span class="insight-icon">✅</span> <span>Chuyển đổi thành công sang LMS tập trung. Học viên chủ động ôn tập và làm bài.</span>
-        </div>
-        <div class="insight-item neutral"><span class="insight-icon">💡</span> <span>Đã xây dựng lộ trình hướng dẫn học trên LMS để khắc phục tình trạng bỡ ngỡ ban đầu của học viên.</span>
-        </div>
-        <div class="insight-item neutral"><span class="insight-icon">🔧</span> <span>Bổ sung nội dung Phần cứng &amp; Word buổi 3 giúp học viên nắm bắt toàn diện hơn.</span>
-        </div>
-        <div class="insight-item positive"><span class="insight-icon">📈</span> <span>Kết quả thử nghiệm Khóa 25KV43 cho tín hiệu rất khả quan.</span>
-        </div>
+        <div class="insight-item positive"><span class="insight-icon">✅</span> <span>Chuyển đổi thành công sang LMS tập trung. Học viên chủ động ôn tập và làm bài.</span></div>
+        <div class="insight-item neutral"><span class="insight-icon">💡</span> <span>Đã xây dựng lộ trình hướng dẫn học trên LMS để khắc phục tình trạng bỡ ngỡ ban đầu của học viên.</span></div>
+        <div class="insight-item neutral"><span class="insight-icon">🔧</span> <span>Bổ sung nội dung Phần cứng &amp; Word buổi 3 giúp học viên nắm bắt toàn diện hơn.</span></div>
+        <div class="insight-item positive"><span class="insight-icon">📈</span> <span>Kết quả thử nghiệm Khóa 25KV43 cho tín hiệu rất khả quan.</span></div>
        </div>
       </div>
      </div>
     </div>
-   </div><!-- Slide 4: KiotViet FNB -->
+   </div>
+   
+   <!-- Slide 4: KiotViet FNB -->
    <div class="slide" id="slide-4">
     <div class="product-slide" style="--product-color: #e67e22;">
      <div class="product-header"><span class="product-icon">🍽️</span>
@@ -1056,109 +374,75 @@
      </div>
      <div class="product-content">
       <div class="metrics-card">
-       <h3 class="card-title">📊 Thống Kê Chi Tiết</h3>
-       <!-- REPLACED PROGRESS BAR WITH CHART -->
+       <div class="card-title">
+           <span>📊 Thống Kê Chi Tiết</span>
+           <!-- BỘ LỌC ĐỦ THÁNG -->
+           <select class="month-filter" onchange="filterData('fnb', this.value)">
+               <option value="all">Tất cả (T7-T11)</option>
+               <option value="7">Tháng 7</option>
+               <option value="8">Tháng 8</option>
+               <option value="9">Tháng 9</option>
+               <option value="10">Tháng 10</option>
+               <option value="11">Tháng 11</option>
+           </select>
+       </div>
        <p style="text-align: center; color: #7f8c8d; font-size: 0.9rem; margin-bottom: 10px;">Phân bổ học viên theo tháng</p>
-       <div class="mini-product-chart">
-           <!-- T7: 24 -->
-           <div class="month-bar" style="height: 75%; background: #e67e22;" data-delay="0.1s">
-               <span class="month-label">T7</span>
-               <div class="month-tooltip">
-                   <span class="tooltip-title">Tháng 7</span>
-                   <div class="tooltip-row"><span>• PC:</span> <b>24 HV</b></div>
-               </div>
+       <div class="mini-product-chart" id="chart-fnb">
+           <div class="month-bar" style="height: 75%; background: #e67e22;" data-month="7"><span class="month-label">T7</span>
+               <div class="month-tooltip"><span class="tooltip-title">Tháng 7</span><div class="tooltip-row"><span>• PC:</span> <b>24 HV</b></div></div>
            </div>
-           <!-- T8: 28 -->
-           <div class="month-bar" style="height: 87%; background: #e67e22;" data-delay="0.2s">
-               <span class="month-label">T8</span>
-               <div class="month-tooltip">
-                   <span class="tooltip-title">Tháng 8</span>
-                   <div class="tooltip-row"><span>• PM:</span> <b>28 HV</b></div>
-               </div>
+           <div class="month-bar" style="height: 87%; background: #e67e22;" data-month="8"><span class="month-label">T8</span>
+               <div class="month-tooltip"><span class="tooltip-title">Tháng 8</span><div class="tooltip-row"><span>• PM:</span> <b>28 HV</b></div></div>
            </div>
-           <!-- T9: 32 (MAX) -->
-           <div class="month-bar" style="height: 100%; background: #e67e22;" data-delay="0.3s">
-               <span class="month-label">T9</span>
-               <div class="month-tooltip">
-                   <span class="tooltip-title">Tháng 9</span>
-                   <div class="tooltip-row"><span>• PM:</span> <b>32 HV</b></div>
-                   <span class="tooltip-highlight">🏆 Tỉ lệ Pass tốt nhất: Lớp PM</span>
-               </div>
+           <div class="month-bar" style="height: 100%; background: #e67e22;" data-month="9"><span class="month-label">T9</span>
+               <div class="month-tooltip"><span class="tooltip-title">Tháng 9</span><div class="tooltip-row"><span>• PM:</span> <b>32 HV</b></div></div>
            </div>
-           <!-- T10: 28 -->
-           <div class="month-bar" style="height: 87%; background: #e67e22;" data-delay="0.4s">
-               <span class="month-label">T10</span>
-               <div class="month-tooltip">
-                   <span class="tooltip-title">Tháng 10</span>
-                   <div class="tooltip-row"><span>• PM:</span> <b>28 HV</b></div>
-               </div>
+           <div class="month-bar" style="height: 87%; background: #e67e22;" data-month="10"><span class="month-label">T10</span>
+               <div class="month-tooltip"><span class="tooltip-title">Tháng 10</span><div class="tooltip-row"><span>• PM:</span> <b>28 HV</b></div></div>
            </div>
-           <!-- T11: 20 -->
-           <div class="month-bar" style="height: 62%; background: #e67e22;" data-delay="0.5s">
-               <span class="month-label">T11</span>
-               <div class="month-tooltip">
-                   <span class="tooltip-title">Tháng 11</span>
-                   <div class="tooltip-row"><span>• PM:</span> <b>20 HV</b></div>
-               </div>
+           <div class="month-bar" style="height: 62%; background: #e67e22;" data-month="11"><span class="month-label">T11</span>
+               <div class="month-tooltip"><span class="tooltip-title">Tháng 11</span><div class="tooltip-row"><span>• PM:</span> <b>20 HV</b></div></div>
            </div>
-           <div class="month-bar" style="height: 0%; border: 1px dashed #ccc; background: none;">
-               <span class="month-label">T12</span>
-               <div class="month-tooltip">Chưa có dữ liệu</div>
-           </div>
+           <div class="month-bar empty-data"><span class="month-label">T12</span></div>
        </div>
 
-       <div class="mini-stats">
+       <div class="mini-stats" id="stats-fnb">
         <div class="mini-stat">
-         <div class="mini-stat-value">
-          132
-         </div>
-         <div class="mini-stat-label">
-          Tổng HV
-         </div>
+         <div class="mini-stat-value" id="fnb-total">132</div>
+         <div class="mini-stat-label">Tổng HV</div>
+         <div class="stat-explanation-tooltip" id="fnb-total-note">Bao gồm cả lớp Phần mềm & Phần cứng</div>
         </div>
         <div class="mini-stat">
-         <div class="mini-stat-value">
-          108
-         </div>
-         <div class="mini-stat-label">
-          HV P.Mềm
-         </div>
+         <div class="mini-stat-value" id="fnb-sw">108</div>
+         <div class="mini-stat-label">HV P.Mềm</div>
+         <div class="stat-explanation-tooltip" id="fnb-sw-note">Chiếm 82% tổng số học viên</div>
         </div>
         <div class="mini-stat">
-         <div class="mini-stat-value">
-          89%
-         </div>
-         <div class="mini-stat-label">
-          Điểm TB
-         </div>
+         <div class="mini-stat-value" id="fnb-score">89%</div>
+         <div class="mini-stat-label">Điểm TB</div>
+         <div class="stat-explanation-tooltip" id="fnb-score-note">Điểm trung bình các bài kiểm tra</div>
         </div>
-        <!-- ADDED SATISFACTION SCORE -->
         <div class="mini-stat">
-         <div class="mini-stat-value">
-          4.7/5
-         </div>
-         <div class="mini-stat-label">
-          Hài lòng
-         </div>
+         <div class="mini-stat-value" id="fnb-sat">4.7/5</div>
+         <div class="mini-stat-label">Hài lòng</div>
+         <div class="stat-explanation-tooltip" id="fnb-sat-note">Đánh giá sau khóa học</div>
         </div>
        </div>
       </div>
       <div class="analysis-card">
        <h3 class="card-title">🎯 Phân tích &amp; Insight</h3>
        <div class="insights">
-        <div class="insight-item negative"><span class="insight-icon">⚠️</span> <span>Lớp phần cứng (Offline): Một số học viên kỳ vọng chuyên sâu thay vì cơ bản. -> Đã đẩy video chi tiết lên LMS.</span>
-        </div>
-        <div class="insight-item neutral"><span class="insight-icon">🔄</span> <span>Phương pháp mới: Video luồng 6 bước cơ bản được đưa lên LMS để tự học &amp; thi.</span>
-        </div>
-        <div class="insight-item positive"><span class="insight-icon">🚀</span> <span>Lớp Online sẽ tập trung vào tính năng nâng cao (Hàng hóa đặc thù/ Thực Đơn Điện Tử/ GrabFood/ ShopeeFood/ Kết Ca) và giải pháp theo mô hình cụ thể.</span>
-        </div>
-        <div class="insight-item positive"><span class="insight-icon">📚</span> <span>Đầy đủ tài liệu &amp; Quiz cho từng video phần cứng (Máy in, POS, Két tiền...).</span>
-        </div>
+        <div class="insight-item negative"><span class="insight-icon">⚠️</span> <span>Lớp phần cứng (Offline): Một số học viên kỳ vọng chuyên sâu thay vì cơ bản. -> Đã đẩy video chi tiết lên LMS.</span></div>
+        <div class="insight-item neutral"><span class="insight-icon">🔄</span> <span>Phương pháp mới: Video luồng 6 bước cơ bản được đưa lên LMS để tự học &amp; thi.</span></div>
+        <div class="insight-item positive"><span class="insight-icon">🚀</span> <span>Lớp Online sẽ tập trung vào tính năng nâng cao (Hàng hóa đặc thù/ Thực Đơn Điện Tử/ GrabFood/...)</span></div>
+        <div class="insight-item positive"><span class="insight-icon">📚</span> <span>Đầy đủ tài liệu &amp; Quiz cho từng video phần cứng (Máy in, POS, Két tiền...).</span></div>
        </div>
       </div>
      </div>
     </div>
-   </div><!-- Slide 5: KiotViet Salon -->
+   </div>
+   
+   <!-- Slide 5: KiotViet Salon -->
    <div class="slide" id="slide-5">
     <div class="product-slide" style="--product-color: #9b59b6;">
      <div class="product-header"><span class="product-icon">💇</span>
@@ -1169,95 +453,77 @@
      </div>
      <div class="product-content">
       <div class="metrics-card">
-       <h3 class="card-title">📊 Thống Kê Chi Tiết</h3>
-       <!-- REPLACED PROGRESS BAR WITH CHART -->
+       <div class="card-title">
+           <span>📊 Thống Kê Chi Tiết</span>
+           <!-- BỘ LỌC ĐỦ THÁNG -->
+           <select class="month-filter" onchange="filterData('salon', this.value)">
+               <option value="all">Tất cả (T7-T11)</option>
+               <option value="7">Tháng 7</option>
+               <option value="8">Tháng 8</option>
+               <option value="9">Tháng 9</option>
+               <option value="10">Tháng 10</option>
+               <option value="11">Tháng 11</option>
+           </select>
+       </div>
        <p style="text-align: center; color: #7f8c8d; font-size: 0.9rem; margin-bottom: 10px;">Biểu đồ triển khai</p>
-       <div class="mini-product-chart">
-           <div class="month-bar" style="height: 5%; opacity: 0.3; background: #9b59b6;">
-               <span class="month-label">T7</span>
-               <div class="month-tooltip">Không có dữ liệu</div>
+       <div class="mini-product-chart" id="chart-salon">
+           <!-- FIX: TÁCH RIÊNG THÁNG 7,8,9 -->
+           <div class="month-bar empty-data" data-month="7"><span class="month-label">T7</span>
+                <div class="month-tooltip">Chưa triển khai</div>
            </div>
-           <div class="month-bar" style="height: 5%; opacity: 0.3; background: #9b59b6;">
-               <span class="month-label">T8</span>
-               <div class="month-tooltip">Không có dữ liệu</div>
+           <div class="month-bar empty-data" data-month="8"><span class="month-label">T8</span>
+                <div class="month-tooltip">Chưa triển khai</div>
            </div>
-           <div class="month-bar" style="height: 5%; opacity: 0.3; background: #9b59b6;">
-               <span class="month-label">T9</span>
-               <div class="month-tooltip">Không có dữ liệu</div>
+           <div class="month-bar empty-data" data-month="9"><span class="month-label">T9</span>
+                <div class="month-tooltip">Chưa triển khai</div>
            </div>
            <!-- T10: 13 (MAX) -->
-           <div class="month-bar" style="height: 100%; background: #9b59b6;" data-delay="0.3s">
-               <span class="month-label">T10</span>
-               <div class="month-tooltip">
-                   <span class="tooltip-title">Tháng 10</span>
-                   <div class="tooltip-row"><span>• Salon:</span> <b>13 HV</b></div>
-                   <span class="tooltip-highlight">🏆 Tỉ lệ Pass tốt nhất: Lớp T10</span>
-               </div>
+           <div class="month-bar" style="height: 100%; background: #9b59b6;" data-month="10"><span class="month-label">T10</span>
+               <div class="month-tooltip"><span class="tooltip-title">Tháng 10</span><div class="tooltip-row"><span>• Salon:</span> <b>13 HV</b></div></div>
            </div>
            <!-- T11: 7 -->
-           <div class="month-bar" style="height: 53%; background: #9b59b6;" data-delay="0.4s">
-               <span class="month-label">T11</span>
-               <div class="month-tooltip">
-                   <span class="tooltip-title">Tháng 11</span>
-                   <div class="tooltip-row"><span>• Salon:</span> <b>07 HV</b></div>
-               </div>
+           <div class="month-bar" style="height: 53%; background: #9b59b6;" data-month="11"><span class="month-label">T11</span>
+               <div class="month-tooltip"><span class="tooltip-title">Tháng 11</span><div class="tooltip-row"><span>• Salon:</span> <b>07 HV</b></div></div>
            </div>
-           <div class="month-bar" style="height: 0%; border: 1px dashed #ccc; background: none;">
-               <span class="month-label">T12</span>
-               <div class="month-tooltip">Chưa có dữ liệu</div>
-           </div>
+           <div class="month-bar empty-data"><span class="month-label">T12</span></div>
        </div>
 
-       <div class="mini-stats">
+       <div class="mini-stats" id="stats-salon">
         <div class="mini-stat">
-         <div class="mini-stat-value">
-          2
-         </div>
-         <div class="mini-stat-label">
-          Lớp (T10-11)
-         </div>
+         <div class="mini-stat-value" id="salon-classes">2</div>
+         <div class="mini-stat-label">Lớp</div>
+         <div class="stat-explanation-tooltip" id="salon-classes-note">Các lớp tập trung tháng 10 & 11</div>
         </div>
         <div class="mini-stat">
-         <div class="mini-stat-value">
-          20
-         </div>
-         <div class="mini-stat-label">
-          Học viên
-         </div>
+         <div class="mini-stat-value" id="salon-students">20</div>
+         <div class="mini-stat-label">Học viên</div>
+         <div class="stat-explanation-tooltip" id="salon-students-note">Tổng số học viên tham gia</div>
         </div>
         <div class="mini-stat">
-         <div class="mini-stat-value">
-          92%
-         </div>
-         <div class="mini-stat-label">
-          Điểm thi
-         </div>
+         <div class="mini-stat-value" id="salon-score">92%</div>
+         <div class="mini-stat-label">Điểm thi</div>
+         <div class="stat-explanation-tooltip" id="salon-score-note">Kết quả test khá cao</div>
         </div>
-        <!-- ADDED SATISFACTION SCORE -->
         <div class="mini-stat">
-         <div class="mini-stat-value">
-          4.9/5
-         </div>
-         <div class="mini-stat-label">
-          Hài lòng
-         </div>
+         <div class="mini-stat-value" id="salon-sat">4.9/5</div>
+         <div class="mini-stat-label">Hài lòng</div>
+         <div class="stat-explanation-tooltip" id="salon-sat-note">Điểm phản hồi rất tích cực</div>
         </div>
        </div>
       </div>
       <div class="analysis-card">
        <h3 class="card-title">🎯 Phân tích &amp; Insight</h3>
        <div class="insights">
-        <div class="insight-item neutral"><span class="insight-icon">🤔</span> <span>Chương trình hiện tại được đánh giá là hơi cơ bản và dễ so với nhu cầu thực tế.</span>
-        </div>
-        <div class="insight-item positive"><span class="insight-icon">🔄</span> <span>Đã đưa khóa cơ bản lên LMS kèm Quiz (áp dụng từ tháng 12).</span>
-        </div>
-        <div class="insight-item positive"><span class="insight-icon">📈</span> <span>Kế hoạch: Tập trung xây dựng các bài học nâng cao, nghiệp vụ chuyên sâu hơn cho Salon/Spa.</span>
-        </div>
+        <div class="insight-item neutral"><span class="insight-icon">🤔</span> <span>Chương trình hiện tại được đánh giá là hơi cơ bản và dễ so với nhu cầu thực tế.</span></div>
+        <div class="insight-item positive"><span class="insight-icon">🔄</span> <span>Đã đưa khóa cơ bản lên LMS kèm Quiz (áp dụng từ tháng 12).</span></div>
+        <div class="insight-item positive"><span class="insight-icon">📈</span> <span>Kế hoạch: Tập trung xây dựng các bài học nâng cao, nghiệp vụ chuyên sâu hơn cho Salon/Spa.</span></div>
        </div>
       </div>
      </div>
     </div>
-   </div><!-- Slide 6: KiotViet Hotel -->
+   </div>
+   
+   <!-- Slide 6: KiotViet Hotel -->
    <div class="slide" id="slide-6">
     <div class="product-slide" style="--product-color: #27ae60;">
      <div class="product-header"><span class="product-icon">🏨</span>
@@ -1268,95 +534,77 @@
      </div>
      <div class="product-content">
       <div class="metrics-card">
-       <h3 class="card-title">📊 Thống Kê Chi Tiết</h3>
-       <!-- REPLACED PROGRESS BAR WITH CHART -->
+       <div class="card-title">
+           <span>📊 Thống Kê Chi Tiết</span>
+           <!-- BỘ LỌC ĐỦ THÁNG -->
+           <select class="month-filter" onchange="filterData('hotel', this.value)">
+               <option value="all">Tất cả (T7-T11)</option>
+               <option value="7">Tháng 7</option>
+               <option value="8">Tháng 8</option>
+               <option value="9">Tháng 9</option>
+               <option value="10">Tháng 10</option>
+               <option value="11">Tháng 11</option>
+           </select>
+       </div>
        <p style="text-align: center; color: #7f8c8d; font-size: 0.9rem; margin-bottom: 10px;">Biểu đồ triển khai</p>
-       <div class="mini-product-chart">
-           <div class="month-bar" style="height: 5%; opacity: 0.3; background: #27ae60;">
-               <span class="month-label">T7</span>
-               <div class="month-tooltip">Không có dữ liệu</div>
+       <div class="mini-product-chart" id="chart-hotel">
+           <!-- FIX: TÁCH RIÊNG THÁNG 7,8,9 -->
+           <div class="month-bar empty-data" data-month="7"><span class="month-label">T7</span>
+                <div class="month-tooltip">Chưa triển khai</div>
            </div>
-           <div class="month-bar" style="height: 5%; opacity: 0.3; background: #27ae60;">
-               <span class="month-label">T8</span>
-               <div class="month-tooltip">Không có dữ liệu</div>
+           <div class="month-bar empty-data" data-month="8"><span class="month-label">T8</span>
+                <div class="month-tooltip">Chưa triển khai</div>
            </div>
-           <div class="month-bar" style="height: 5%; opacity: 0.3; background: #27ae60;">
-               <span class="month-label">T9</span>
-               <div class="month-tooltip">Không có dữ liệu</div>
+           <div class="month-bar empty-data" data-month="9"><span class="month-label">T9</span>
+                <div class="month-tooltip">Chưa triển khai</div>
            </div>
            <!-- T10: 9 (MAX) -->
-           <div class="month-bar" style="height: 100%; background: #27ae60;" data-delay="0.3s">
-               <span class="month-label">T10</span>
-               <div class="month-tooltip">
-                   <span class="tooltip-title">Tháng 10</span>
-                   <div class="tooltip-row"><span>• Hotel:</span> <b>09 HV</b></div>
-                   <span class="tooltip-highlight">🏆 Tỉ lệ Pass tốt nhất: Lớp T10</span>
-               </div>
+           <div class="month-bar" style="height: 100%; background: #27ae60;" data-month="10"><span class="month-label">T10</span>
+               <div class="month-tooltip"><span class="tooltip-title">Tháng 10</span><div class="tooltip-row"><span>• Hotel:</span> <b>09 HV</b></div></div>
            </div>
            <!-- T11: 6 -->
-           <div class="month-bar" style="height: 66%; background: #27ae60;" data-delay="0.4s">
-               <span class="month-label">T11</span>
-               <div class="month-tooltip">
-                   <span class="tooltip-title">Tháng 11</span>
-                   <div class="tooltip-row"><span>• Hotel:</span> <b>06 HV</b></div>
-               </div>
+           <div class="month-bar" style="height: 66%; background: #27ae60;" data-month="11"><span class="month-label">T11</span>
+               <div class="month-tooltip"><span class="tooltip-title">Tháng 11</span><div class="tooltip-row"><span>• Hotel:</span> <b>06 HV</b></div></div>
            </div>
-           <div class="month-bar" style="height: 0%; border: 1px dashed #ccc; background: none;">
-               <span class="month-label">T12</span>
-               <div class="month-tooltip">Chưa có dữ liệu</div>
-           </div>
+           <div class="month-bar empty-data"><span class="month-label">T12</span></div>
        </div>
 
-       <div class="mini-stats">
+       <div class="mini-stats" id="stats-hotel">
         <div class="mini-stat">
-         <div class="mini-stat-value">
-          2
-         </div>
-         <div class="mini-stat-label">
-          Lớp (T10-11)
-         </div>
+         <div class="mini-stat-value" id="hotel-classes">2</div>
+         <div class="mini-stat-label">Lớp</div>
+         <div class="stat-explanation-tooltip" id="hotel-classes-note">Các lớp tập trung tháng 10 & 11</div>
         </div>
         <div class="mini-stat">
-         <div class="mini-stat-value">
-          15
-         </div>
-         <div class="mini-stat-label">
-          Học viên
-         </div>
+         <div class="mini-stat-value" id="hotel-students">15</div>
+         <div class="mini-stat-label">Học viên</div>
+         <div class="stat-explanation-tooltip" id="hotel-students-note">Quy mô lớp nhỏ để chuyên sâu</div>
         </div>
         <div class="mini-stat">
-         <div class="mini-stat-value">
-          89%
-         </div>
-         <div class="mini-stat-label">
-          Điểm TB
-         </div>
+         <div class="mini-stat-value" id="hotel-score">89%</div>
+         <div class="mini-stat-label">Điểm TB</div>
+         <div class="stat-explanation-tooltip" id="hotel-score-note">Điểm đánh giá kiến thức</div>
         </div>
-        <!-- ADDED SATISFACTION SCORE -->
         <div class="mini-stat">
-         <div class="mini-stat-value">
-          4.8/5
-         </div>
-         <div class="mini-stat-label">
-          Hài lòng
-         </div>
+         <div class="mini-stat-value" id="hotel-sat">4.8/5</div>
+         <div class="mini-stat-label">Hài lòng</div>
+         <div class="stat-explanation-tooltip" id="hotel-sat-note">Đánh giá cao về sự nhiệt tình</div>
         </div>
        </div>
       </div>
       <div class="analysis-card">
        <h3 class="card-title">🎯 Phân tích &amp; Insight</h3>
        <div class="insights">
-        <div class="insight-item neutral"><span class="insight-icon">📝</span> <span>Tương tự Salon, nội dung hiện tại còn ở mức cơ bản.</span>
-        </div>
-        <div class="insight-item positive"><span class="insight-icon">📲</span> <span>Chiến lược: Chuyển nội dung cơ bản sang tự học trên LMS.</span>
-        </div>
-        <div class="insight-item positive"><span class="insight-icon">🚀</span> <span>Dành thời gian đào tạo Online/Offline các nghiệp vụ khó và xử lý tình huống thực tế tại khách sạn.</span>
-        </div>
+        <div class="insight-item neutral"><span class="insight-icon">📝</span> <span>Tương tự Salon, nội dung hiện tại còn ở mức cơ bản.</span></div>
+        <div class="insight-item positive"><span class="insight-icon">📲</span> <span>Chiến lược: Chuyển nội dung cơ bản sang tự học trên LMS.</span></div>
+        <div class="insight-item positive"><span class="insight-icon">🚀</span> <span>Dành thời gian đào tạo Online/Offline các nghiệp vụ khó và xử lý tình huống thực tế tại khách sạn.</span></div>
        </div>
       </div>
      </div>
     </div>
-   </div><!-- Slide 7: E-Invoice -->
+   </div>
+   
+   <!-- Slide 7: E-Invoice -->
    <div class="slide" id="slide-7">
     <div class="product-slide" style="--product-color: #34495e;">
      <div class="product-header"><span class="product-icon">📄</span>
@@ -1367,91 +615,76 @@
      </div>
      <div class="product-content">
       <div class="metrics-card">
-       <h3 class="card-title">📊 Thống Kê Chi Tiết</h3>
-       <!-- REPLACED PROGRESS BAR WITH CHART -->
+       <div class="card-title">
+           <span>📊 Thống Kê Chi Tiết</span>
+           <!-- BỘ LỌC ĐỦ THÁNG -->
+           <select class="month-filter" onchange="filterData('invoice', this.value)">
+               <option value="all">Tất cả (T7-T11)</option>
+               <option value="7">Tháng 7</option>
+               <option value="8">Tháng 8</option>
+               <option value="9">Tháng 9</option>
+               <option value="10">Tháng 10</option>
+               <option value="11">Tháng 11</option>
+           </select>
+       </div>
        <p style="text-align: center; color: #7f8c8d; font-size: 0.9rem; margin-bottom: 10px;">Lớp đào tạo duy nhất (Tháng 10)</p>
-       <div class="mini-product-chart">
-           <div class="month-bar" style="height: 5%; opacity: 0.3; background: #34495e;">
-               <span class="month-label">T7</span>
-               <div class="month-tooltip">Không có dữ liệu</div>
+       <div class="mini-product-chart" id="chart-invoice">
+           <!-- FIX: TÁCH RIÊNG THÁNG 7,8,9 -->
+           <div class="month-bar empty-data" data-month="7"><span class="month-label">T7</span>
+                <div class="month-tooltip">Chưa triển khai</div>
            </div>
-           <div class="month-bar" style="height: 5%; opacity: 0.3; background: #34495e;">
-               <span class="month-label">T8</span>
-               <div class="month-tooltip">Không có dữ liệu</div>
+           <div class="month-bar empty-data" data-month="8"><span class="month-label">T8</span>
+                <div class="month-tooltip">Chưa triển khai</div>
            </div>
-           <div class="month-bar" style="height: 5%; opacity: 0.3; background: #34495e;">
-               <span class="month-label">T9</span>
-               <div class="month-tooltip">Không có dữ liệu</div>
+           <div class="month-bar empty-data" data-month="9"><span class="month-label">T9</span>
+                <div class="month-tooltip">Chưa triển khai</div>
            </div>
            <!-- T10: 43 (MAX) -->
-           <div class="month-bar" style="height: 100%; background: #34495e;" data-delay="0.3s">
-               <span class="month-label">T10</span>
-               <div class="month-tooltip">
-                   <span class="tooltip-title">Tháng 10</span>
-                   <div class="tooltip-row"><span>• HĐĐT:</span> <b>43 HV</b></div>
-                   <span class="tooltip-highlight" style="color: #f1c40f; background: rgba(241, 196, 15, 0.1);">⚠️ Chưa có điểm Pass</span>
-               </div>
+           <div class="month-bar" style="height: 100%; background: #34495e;" data-month="10"><span class="month-label">T10</span>
+               <div class="month-tooltip"><span class="tooltip-title">Tháng 10</span><div class="tooltip-row"><span>• HĐĐT:</span> <b>43 HV</b></div><span class="tooltip-highlight" style="color: #f1c40f; background: rgba(241, 196, 15, 0.1);">⚠️ Chưa có điểm Pass</span></div>
            </div>
-           <div class="month-bar" style="height: 5%; opacity: 0.3; background: #34495e;">
-               <span class="month-label">T11</span>
-               <div class="month-tooltip">Không có dữ liệu</div>
+           <div class="month-bar empty-data" data-month="11"><span class="month-label">T11</span>
+                <div class="month-tooltip">Chưa triển khai</div>
            </div>
-           <div class="month-bar" style="height: 0%; border: 1px dashed #ccc; background: none;">
-               <span class="month-label">T12</span>
-               <div class="month-tooltip">Chưa có dữ liệu</div>
-           </div>
+           <div class="month-bar empty-data"><span class="month-label">T12</span></div>
        </div>
 
-       <div class="mini-stats">
+       <div class="mini-stats" id="stats-invoice">
         <div class="mini-stat">
-         <div class="mini-stat-value">
-          1
-         </div>
-         <div class="mini-stat-label">
-          Lớp (T10)
-         </div>
+         <div class="mini-stat-value" id="invoice-classes">1</div>
+         <div class="mini-stat-label">Lớp (T10)</div>
+         <div class="stat-explanation-tooltip" id="invoice-classes-note">Lớp đào tạo tập trung duy nhất</div>
         </div>
         <div class="mini-stat">
-         <div class="mini-stat-value">
-          43
-         </div>
-         <div class="mini-stat-label">
-          Học viên
-         </div>
+         <div class="mini-stat-value" id="invoice-students">43</div>
+         <div class="mini-stat-label">Học viên</div>
+         <div class="stat-explanation-tooltip" id="invoice-students-note">Số lượng học viên tham gia T10</div>
         </div>
         <div class="mini-stat">
-         <div class="mini-stat-value">
-          T12
-         </div>
-         <div class="mini-stat-label">
-          Bắt đầu Test
-         </div>
+         <div class="mini-stat-value" id="invoice-test">T12</div>
+         <div class="mini-stat-label">Bắt đầu Test</div>
+         <div class="stat-explanation-tooltip" id="invoice-test-note">Sẽ triển khai bài test từ T12</div>
         </div>
-        <!-- ADDED SATISFACTION SCORE -->
         <div class="mini-stat">
-         <div class="mini-stat-value">
-          4.5/5
-         </div>
-         <div class="mini-stat-label">
-          Hài lòng
-         </div>
+         <div class="mini-stat-value" id="invoice-sat">4.5/5</div>
+         <div class="mini-stat-label">Hài lòng</div>
+         <div class="stat-explanation-tooltip" id="invoice-sat-note">Phản hồi tích cực nhưng cần cải thiện</div>
         </div>
        </div>
       </div>
       <div class="analysis-card">
        <h3 class="card-title">🎯 Phân tích &amp; Insight</h3>
        <div class="insights">
-        <div class="insight-item negative"><span class="insight-icon">⚠️</span> <span>Đặc thù nghiệp vụ khó, chỉ học qua LMS là chưa đủ.</span>
-        </div>
-        <div class="insight-item positive"><span class="insight-icon">🤝</span> <span>Áp dụng hình thức: Học viên tự học lý thuyết trên LMS + Giảng viên Demo trực tiếp online để giải thích chi tiết.</span>
-        </div>
-        <div class="insight-item neutral"><span class="insight-icon">📅</span> <span>Tháng 12: Chính thức áp dụng bài Test sau khóa đào tạo để đánh giá năng lực cho Khóa mới.</span>
-        </div>
+        <div class="insight-item negative"><span class="insight-icon">⚠️</span> <span>Đặc thù nghiệp vụ khó, chỉ học qua LMS là chưa đủ.</span></div>
+        <div class="insight-item positive"><span class="insight-icon">🤝</span> <span>Áp dụng hình thức: Học viên tự học lý thuyết trên LMS + Giảng viên Demo trực tiếp online để giải thích chi tiết.</span></div>
+        <div class="insight-item neutral"><span class="insight-icon">📅</span> <span>Tháng 12: Chính thức áp dụng bài Test sau khóa đào tạo để đánh giá năng lực cho Khóa mới.</span></div>
        </div>
       </div>
      </div>
     </div>
-   </div><!-- Slide 8: Summary -->
+   </div>
+   
+   <!-- Slide 8: Summary (ĐÃ SỬA LỖI LAYOUT) -->
    <div class="slide" id="slide-8">
     <div class="slide-header">
      <h1 class="slide-title">II. Tổng Kết &amp; Bài Học Kinh Nghiệm</h1>
@@ -1478,10 +711,11 @@
            </ul>
        </div>
       </div>
+      <!-- ĐÃ THÊM LẠI MỤC NỘI DUNG GIẢNG DẠY -->
       <div class="list-item"><span class="list-icon">📚</span>
        <div><strong>Nội dung giảng dạy:</strong>
            <ul>
-               <li>Hỗ trợ quay dựng Video về sản phẩm các ngành FNB, Salon, Hotel trên giao điện mới.</li>
+               <li>Hỗ trợ quay dựng Video về sản phẩm các ngành FNB, Salon, Hotel trên giao diện mới.</li>
            </ul>
        </div>
       </div>
@@ -1505,7 +739,9 @@
       </div>
      </div>
     </div>
-   </div><!-- Slide 9: Next Steps -->
+   </div>
+   
+   <!-- Slide 9: Next Steps -->
    <div class="slide" id="slide-9">
     <div class="slide-header">
      <h1 class="slide-title">III. Kế Hoạch &amp; Định Hướng Sắp Tới</h1>
@@ -1535,8 +771,8 @@
       </div>
       <div class="step-content">
        <ul class="step-list">
-        <li>Phân tách đào tạo theo mô hình cụ thể (Mô hình Quick Service: Cà Phê, Trà Sữa, Tiệm Bánh, Food Truck,... . Mô hình Full Service: Nhà hàng, Quán Ăn, Karaoke, Bida,...).</li>
-        <li>Đào tạo tích hợp nâng cao (Dịch vụ tính giờ, Combo Tùy chọn, Buffet. Thực đơn điện tử, GrabFood, ShopeeFood, Kết ca ).</li>
+        <li>Phân tách đào tạo theo mô hình cụ thể (Quick Service & Full Service).</li>
+        <li>Đào tạo tích hợp nâng cao (Dịch vụ tính giờ, Combo Tùy chọn, Buffet...).</li>
         <li>Tư vấn giải pháp toàn diện thay vì chỉ bán tính năng.</li>
        </ul>
       </div>
@@ -1560,23 +796,25 @@
        <div class="step-icon">
         🛍️
        </div>
-       <h3 class="step-title">Tối ưu Retail &amp; Khác</h3>
+       <h3 class="step-title">Khác</h3>
       </div>
       <div class="step-content">
        <ul class="step-list">
-        <li>Tiếp tục bổ sung kiến thức phần cứng vào lộ trình.</li>
-        <li>Xây dựng kho bài giảng nâng cao cho Salon &amp; Hotel.</li>
+        <li>Cập nhật lại đề thi 2026 cho các ngành.</li>
+        <li>Xây dựng kho bài giảng nâng cao cho các ngành.</li>
        </ul>
       </div>
      </div>
     </div>
-   </div><!-- Slide 10: Thank You -->
+   </div>
+   
+   <!-- Slide 10: Thank You -->
    <div class="slide" id="slide-10">
     <div class="title-slide">
      <div class="title-content">
       <div class="thank-you-content">
        <div class="main-title">
-        <h1 style="font-size: 3.5rem; margin-bottom: 30px; background: linear-gradient(135deg, #3498db, #9b59b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Cảm ơn Anh/Chị<br>
+        <h1 style="font-size: 3.5rem; margin-bottom: 30px; background: linear-gradient(135deg, #3498db, #9b59b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Cảm ơn Anh/ Chị/ Em<br>
          đã lắng nghe!</h1>
        </div>
        <div class="contact-info">
@@ -1587,22 +825,115 @@
        </div>
       </div>
      </div>
-     <div class="title-decoration">
-      <div class="floating-icon" style="top: 20%; left: 10%">
-       🎉
-      </div>
-      <div class="floating-icon" style="bottom: 20%; right: 10%">
-       🌟
-      </div>
-     </div>
     </div>
    </div>
-  </div><!-- Navigation -->
+  </div>
+  
+  <!-- Navigation -->
   <div class="navigation"><button class="nav-btn" id="prev-btn" onclick="previousSlide()">Trước</button> <button class="nav-btn" id="next-btn" onclick="nextSlide()">Tiếp</button>
   </div>
+  
   <script>
         let currentSlide = 1;
         const totalSlides = 10;
+        
+        // --- DỮ LIỆU ĐÃ CẬP NHẬT ĐẦY ĐỦ CÁC THÁNG ---
+        const reportData = {
+            'retail': {
+                'all': { classes: { val: '15', note: 'Tổng số lớp từ T7-T11' }, score: { val: '91%', note: 'Điểm trung bình chung' }, pass: { val: '98%', note: 'Học viên đạt' }, sat: { val: '4.8/5', note: 'Đánh giá chung' } },
+                '7': { classes: { val: '4', note: 'Tháng 7: 4 Lớp Retail' }, score: { val: '92%', note: 'Điểm số tốt' }, pass: { val: '99%', note: 'Tỷ lệ đạt cao' }, sat: { val: '4.9/5', note: 'Rất hài lòng' } },
+                '8': { classes: { val: '2', note: 'Tháng 8: 2 Lớp' }, score: { val: '90%', note: 'Điểm khá' }, pass: { val: '96%', note: 'Đạt yêu cầu' }, sat: { val: '4.8/5', note: 'Hài lòng' } },
+                '9': { classes: { val: '3', note: 'Tháng 9: 3 Lớp' }, score: { val: '89%', note: 'Cần cải thiện 1 chút' }, pass: { val: '95%', note: 'Đạt yêu cầu' }, sat: { val: '4.7/5', note: 'Tương tác tốt' } },
+                '10': { classes: { val: '3', note: 'Tháng 10: 3 Lớp' }, score: { val: '91%', note: 'Kết quả tốt' }, pass: { val: '100%', note: 'Xuất sắc' }, sat: { val: '4.8/5', note: 'Hài lòng' } },
+                '11': { classes: { val: '3', note: 'Tháng 11: 3 Lớp' }, score: { val: '93%', note: 'Kết quả cao nhất' }, pass: { val: '100%', note: 'Xuất sắc' }, sat: { val: '4.9/5', note: 'Rất hài lòng' } }
+            },
+            'fnb': {
+                'all': { total: { val: '132', note: 'Tổng HV FNB' }, sw: { val: '108', note: 'Phần mềm chiếm đa số' }, score: { val: '89%', note: 'Điểm TB' }, sat: { val: '4.7/5', note: 'Hài lòng' } },
+                '7': { total: { val: '24', note: 'Chủ yếu học Phần cứng' }, sw: { val: '0', note: 'Không có lớp PM' }, score: { val: '88%', note: 'Khá' }, sat: { val: '4.6/5', note: 'Cần thêm nội dung' } },
+                '8': { total: { val: '28', note: 'Bắt đầu lớp PM' }, sw: { val: '28', note: '100% học PM' }, score: { val: '90%', note: 'Tốt' }, sat: { val: '4.8/5', note: 'Hài lòng' } },
+                '9': { total: { val: '32', note: 'Lớp đông nhất' }, sw: { val: '32', note: 'Sôi nổi' }, score: { val: '92%', note: 'Giỏi' }, sat: { val: '4.8/5', note: 'Hài lòng' } },
+                '10': { total: { val: '28', note: 'Ổn định' }, sw: { val: '28', note: 'Đào tạo tập trung' }, score: { val: '89%', note: 'Khá giỏi' }, sat: { val: '4.7/5', note: 'Hài lòng' } },
+                '11': { total: { val: '20', note: 'Giảm nhẹ cuối năm' }, sw: { val: '20', note: 'Ôn tập nhiều' }, score: { val: '88%', note: 'Khá' }, sat: { val: '4.7/5', note: 'Hài lòng' } }
+            },
+            'salon': {
+                'all': { classes: { val: '2', note: 'Tổng số lớp' }, students: { val: '20', note: 'Tổng HV' }, score: { val: '92%', note: 'Điểm cao' }, sat: { val: '4.9/5', note: 'Rất hài lòng' } },
+                '7': { classes: { val: '0', note: 'Chưa triển khai' }, students: { val: '0', note: 'Chưa có HV' }, score: { val: 'N/A', note: 'Chưa có' }, sat: { val: 'N/A', note: 'Chưa có' } },
+                '8': { classes: { val: '0', note: 'Chưa triển khai' }, students: { val: '0', note: 'Chưa có HV' }, score: { val: 'N/A', note: 'Chưa có' }, sat: { val: 'N/A', note: 'Chưa có' } },
+                '9': { classes: { val: '0', note: 'Chưa triển khai' }, students: { val: '0', note: 'Chưa có HV' }, score: { val: 'N/A', note: 'Chưa có' }, sat: { val: 'N/A', note: 'Chưa có' } },
+                '10': { classes: { val: '1', note: 'Lớp đầu tiên' }, students: { val: '13', note: 'Lớp đông' }, score: { val: '94%', note: 'Xuất sắc' }, sat: { val: '5.0/5', note: 'Tuyệt vời' } },
+                '11': { classes: { val: '1', note: 'Lớp thứ 2' }, students: { val: '7', note: 'Lớp nhỏ' }, score: { val: '90%', note: 'Giỏi' }, sat: { val: '4.8/5', note: 'Hài lòng' } }
+            },
+            'hotel': {
+                'all': { classes: { val: '2', note: 'Tổng số lớp' }, students: { val: '15', note: 'Tổng HV' }, score: { val: '89%', note: 'Điểm khá giỏi' }, sat: { val: '4.8/5', note: 'Hài lòng' } },
+                '7': { classes: { val: '0', note: 'Chưa triển khai' }, students: { val: '0', note: 'Chưa có HV' }, score: { val: 'N/A', note: 'Chưa có' }, sat: { val: 'N/A', note: 'Chưa có' } },
+                '8': { classes: { val: '0', note: 'Chưa triển khai' }, students: { val: '0', note: 'Chưa có HV' }, score: { val: 'N/A', note: 'Chưa có' }, sat: { val: 'N/A', note: 'Chưa có' } },
+                '9': { classes: { val: '0', note: 'Chưa triển khai' }, students: { val: '0', note: 'Chưa có HV' }, score: { val: 'N/A', note: 'Chưa có' }, sat: { val: 'N/A', note: 'Chưa có' } },
+                '10': { classes: { val: '1', note: 'Lớp đầu tiên' }, students: { val: '9', note: 'Nhóm hạt nhân' }, score: { val: '91%', note: 'Tốt' }, sat: { val: '4.9/5', note: 'Rất hài lòng' } },
+                '11': { classes: { val: '1', note: 'Lớp thứ 2' }, students: { val: '6', note: 'Lớp nhỏ' }, score: { val: '87%', note: 'Khá' }, sat: { val: '4.7/5', note: 'Hài lòng' } }
+            },
+            'invoice': {
+                'all': { classes: { val: '1', note: 'Tổng số lớp' }, students: { val: '43', note: 'Tổng HV' }, test: { val: 'T12', note: 'Dự kiến' }, sat: { val: '4.5/5', note: 'Khá' } },
+                '7': { classes: { val: '0', note: 'Chưa triển khai' }, students: { val: '0', note: 'Chưa có HV' }, test: { val: 'N/A', note: 'Chưa có' }, sat: { val: 'N/A', note: 'Chưa có' } },
+                '8': { classes: { val: '0', note: 'Chưa triển khai' }, students: { val: '0', note: 'Chưa có HV' }, test: { val: 'N/A', note: 'Chưa có' }, sat: { val: 'N/A', note: 'Chưa có' } },
+                '9': { classes: { val: '0', note: 'Chưa triển khai' }, students: { val: '0', note: 'Chưa có HV' }, test: { val: 'N/A', note: 'Chưa có' }, sat: { val: 'N/A', note: 'Chưa có' } },
+                '10': { classes: { val: '1', note: 'Lớp duy nhất' }, students: { val: '43', note: 'Đông HV' }, test: { val: 'N/A', note: 'Chưa test' }, sat: { val: '4.5/5', note: 'Nghiệp vụ khó' } },
+                '11': { classes: { val: '0', note: 'Không có lớp' }, students: { val: '0', note: 'Không có HV' }, test: { val: 'N/A', note: 'Chưa có' }, sat: { val: 'N/A', note: 'Chưa có' } }
+            }
+        };
+
+        // --- HÀM LỌC DỮ LIỆU ---
+        function filterData(product, month) {
+            // 1. Cập nhật biểu đồ (Làm mờ các tháng không chọn)
+            const chart = document.getElementById(`chart-${product}`);
+            if (chart) {
+                const bars = chart.querySelectorAll('.month-bar');
+                bars.forEach(bar => {
+                    const barMonth = bar.getAttribute('data-month');
+                    if (month === 'all') {
+                        bar.classList.remove('dimmed');
+                    } else {
+                        // Nếu barMonth tồn tại và trùng với tháng chọn -> hiện, ngược lại -> mờ
+                        if (barMonth && barMonth === month) {
+                            bar.classList.remove('dimmed');
+                        } else {
+                            bar.classList.add('dimmed');
+                        }
+                    }
+                });
+            }
+
+            // 2. Cập nhật số liệu và Tooltip giải thích
+            const stats = reportData[product][month] || reportData[product]['all'];
+            
+            // Mapping ID trong HTML với Key trong Data Object
+            const idMap = {
+                'retail': { 'retail-classes': 'classes', 'retail-score': 'score', 'retail-pass': 'pass', 'retail-sat': 'sat' },
+                'fnb': { 'fnb-total': 'total', 'fnb-sw': 'sw', 'fnb-score': 'score', 'fnb-sat': 'sat' },
+                'salon': { 'salon-classes': 'classes', 'salon-students': 'students', 'salon-score': 'score', 'salon-sat': 'sat' },
+                'hotel': { 'hotel-classes': 'classes', 'hotel-students': 'students', 'hotel-score': 'score', 'hotel-sat': 'sat' },
+                'invoice': { 'invoice-classes': 'classes', 'invoice-students': 'students', 'invoice-test': 'test', 'invoice-sat': 'sat' }
+            };
+
+            const map = idMap[product];
+            if (map) {
+                for (const [elementId, dataKey] of Object.entries(map)) {
+                    const elValue = document.getElementById(elementId);
+                    const elTooltip = document.getElementById(elementId + '-note');
+                    
+                    if (elValue && stats[dataKey]) {
+                        elValue.style.opacity = 0;
+                        setTimeout(() => {
+                            elValue.textContent = stats[dataKey].val;
+                            elValue.style.opacity = 1;
+                        }, 200);
+                    }
+                    
+                    if (elTooltip && stats[dataKey]) {
+                        elTooltip.textContent = stats[dataKey].note;
+                    }
+                }
+            }
+        }
 
         function showSlide(n) {
             const slides = document.querySelectorAll('.slide');
@@ -1627,23 +958,15 @@
             
             if (currentSlide === 2) {
                 animateCounters();
-                animateChartBars();
             }
-            // Trigger animation for mini charts when entering product slides
-            if (currentSlide >= 3 && currentSlide <= 7) {
+            const activeChart = document.querySelector(`.slide:nth-child(${currentSlide + 2}) .month-bar`);
+            if (activeChart) {
                 animateChartBars();
             }
         }
 
-        function nextSlide() {
-            currentSlide++;
-            showSlide(currentSlide);
-        }
-
-        function previousSlide() {
-            currentSlide--;
-            showSlide(currentSlide);
-        }
+        function nextSlide() { currentSlide++; showSlide(currentSlide); }
+        function previousSlide() { currentSlide--; showSlide(currentSlide); }
 
         function animateCounters() {
             const counters = document.querySelectorAll('.stat-value[data-target]');
@@ -1659,7 +982,6 @@
                         current = target;
                         clearInterval(timer);
                     }
-                    
                     if (isDecimal) {
                         counter.textContent = current.toFixed(1);
                     } else {
@@ -1671,24 +993,19 @@
 
         function animateChartBars() {
             const bars = document.querySelectorAll('.month-bar');
-            bars.forEach((bar, index) => {
+            bars.forEach((bar) => {
                 bar.style.animation = 'none';
-                bar.offsetHeight; /* trigger reflow */
+                bar.offsetHeight; 
                 bar.style.animation = null; 
             });
         }
 
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'ArrowRight' || e.key === ' ') {
-                nextSlide();
-            } else if (e.key === 'ArrowLeft') {
-                previousSlide();
-            }
+            if (e.key === 'ArrowRight' || e.key === ' ') { nextSlide(); } 
+            else if (e.key === 'ArrowLeft') { previousSlide(); }
         });
 
-        document.addEventListener('DOMContentLoaded', function() {
-            showSlide(1);
-        });
+        document.addEventListener('DOMContentLoaded', function() { showSlide(1); });
     </script>
  </body>
 </html>
