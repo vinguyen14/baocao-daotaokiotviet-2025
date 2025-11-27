@@ -66,7 +66,7 @@
         .product-icon { font-size: 3.5rem; line-height: 1; flex-shrink: 0; }
         .product-header-text { max-width: 800px; text-align: left; }
         .product-title { font-size: 1.8rem; font-weight: 700; color: var(--product-color); margin: 0 0 5px 0; line-height: 1.2; }
-        .product-content { display: grid; grid-template-columns: 1fr 1.2fr; gap: 25px; overflow-y: auto; padding: 5px; }
+        .product-content { display: grid; grid-template-columns: 1fr 1.3fr; gap: 25px; overflow-y: auto; padding: 5px; }
         .metrics-card, .analysis-card { background: white; border-radius: 16px; padding: 25px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); animation: slideInUp 0.6s ease-out 0.3s both; display: flex; flex-direction: column; overflow: visible; position: relative; z-index: 5; }
         .card-title { font-size: 1.2rem; font-weight: 600; color: #2c3e50; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; gap: 10px; border-bottom: 2px solid #f1f2f6; padding-bottom: 10px; }
 
@@ -76,16 +76,7 @@
         .month-bar.highlight-bar { background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%); box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3); }
         .month-bar:hover { transform: scale(1.05) translateY(-5px); filter: brightness(1.1); z-index: 50; }
         .month-label { position: absolute; bottom: -25px; left: 50%; transform: translateX(-50%); font-size: 0.75rem; color: #7f8c8d; font-weight: 600; }
-        
-        /* Empty Bar Style for Missing Data */
-        .month-bar.empty-data {
-            background: none !important;
-            border: 1px dashed #bdc3c7;
-            box-shadow: none;
-            height: 0% !important; /* Mặc định là thấp */
-            min-height: 10px; /* Vẫn hiện 1 chút để click */
-        }
-        
+        .month-bar.empty-data { background: none !important; border: 1px dashed #bdc3c7; box-shadow: none; height: 0% !important; min-height: 10px; }
         .month-bar.dimmed { opacity: 0.2 !important; filter: grayscale(100%); transform: scale(1) !important; cursor: default; }
         
         /* Filter Dropdown */
@@ -110,38 +101,49 @@
         .stat-explanation-tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: #2c3e50 transparent transparent transparent; }
         .mini-stat:hover .stat-explanation-tooltip { opacity: 1; visibility: visible; bottom: 120%; }
 
-        /* Insights */
-        .insights { display: flex; flex-direction: column; gap: 12px; flex-grow: 1; }
-        .insight-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 15px; border-radius: 8px; font-size: 0.95rem; font-weight: 500; line-height: 1.5; }
-        .insight-item.positive { background: rgba(39, 174, 96, 0.08); color: #219150; border-left: 4px solid #27ae60; }
-        .insight-item.neutral { background: rgba(52, 152, 219, 0.08); color: #2980b9; border-left: 4px solid #3498db; }
-        .insight-item.negative { background: rgba(231, 76, 60, 0.08); color: #c0392b; border-left: 4px solid #e74c3c; }
-        .insight-icon { font-size: 1.2rem; margin-top: 1px; flex-shrink: 0; }
+        /* Insights - HARMONIZED STYLES */
+        .insights { display: flex; flex-direction: column; gap: 12px; flex-grow: 1; overflow-y: auto; padding-right: 5px; }
+        .insight-item { 
+            padding: 12px 15px; 
+            border-radius: 8px; 
+            font-size: 0.9rem; 
+            line-height: 1.5; 
+            background: #fcfcfc; /* Nền trắng sáng */
+            border: 1px solid #f1f2f6; /* Viền mỏng */
+            border-left-width: 4px; /* Chỉ nhấn màu ở lề trái */
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04); /* Đổ bóng nhẹ */
+            color: #2d3436; /* Màu chữ chính tối, dễ đọc */
+            transition: transform 0.2s;
+        }
+        .insight-item:hover { transform: translateX(3px); }
+        
+        /* Red - Negative/Issue */
+        .insight-item.red { border-left-color: #e74c3c; }
+        .insight-item.red strong { color: #c0392b; display: block; margin-bottom: 4px; } 
 
-        /* Slide 8 Summary Fixes */
-        .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; flex: 1; overflow-y: auto; }
-        .achievement-card, .improvement-card { background: white; border-radius: 16px; padding: 25px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); animation: slideInUp 0.6s ease-out; display: flex; flex-direction: column; }
-        .achievement-card { border-left: 6px solid #27ae60; animation-delay: 0.2s; }
-        .improvement-card { border-left: 6px solid #e74c3c; animation-delay: 0.4s; }
-        /* FIXED: List Item Styling for Slide 8 */
-        .list-item { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px; padding: 12px; background: #f8f9fa; border-radius: 8px; transition: all 0.3s ease; font-size: 0.95rem; list-style: none; /* Removed default dots */ }
-        .list-item:hover { background: #e9ecef; transform: translateX(5px); }
-        .list-icon { margin-top: 2px; flex-shrink: 0; } /* FIXED: Aligned icon with text */
-        .list-item strong { display: block; margin-bottom: 6px; color: #2c3e50; font-size: 1rem; }
-        .list-item ul { margin: 0; padding-left: 20px; list-style-type: disc; color: #576574; }
-        .list-item li { margin-bottom: 4px; line-height: 1.4; }
+        /* Green - Positive/Done */
+        .insight-item.green { border-left-color: #27ae60; }
+        .insight-item.green strong { color: #219150; display: block; margin-bottom: 4px; }
 
-        /* Other Slides */
-        .nextstep-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; flex: 1; overflow-y: auto; padding-bottom: 60px; }
-        .step-card { background: white; border-radius: 16px; padding: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); position: relative; overflow: hidden; animation: slideInUp 0.6s ease-out; animation-fill-mode: both; }
-        .step-card:nth-child(1) { animation-delay: 0.1s; --step-color: #3498db; } .step-card:nth-child(2) { animation-delay: 0.2s; --step-color: #e67e22; } .step-card:nth-child(3) { animation-delay: 0.3s; --step-color: #9b59b6; } .step-card:nth-child(4) { animation-delay: 0.4s; --step-color: #34495e; }
-        .step-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--step-color); }
-        .step-header { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
-        .step-icon { width: 40px; height: 40px; border-radius: 50%; background: var(--step-color); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
-        .step-title { font-size: 1.1rem; font-weight: 600; color: #2c3e50; margin: 0; }
-        .step-list { list-style: none; padding: 0; margin: 0; }
-        .step-list li { padding: 6px 0; position: relative; padding-left: 20px; font-size: 0.9rem; color: #576574; }
-        .step-list li::before { content: '→'; position: absolute; left: 0; color: var(--step-color); font-weight: bold; }
+        /* Blue - Plan/Future */
+        .insight-item.blue { border-left-color: #3498db; }
+        .insight-item.blue strong { color: #2980b9; display: block; margin-bottom: 4px; }
+        
+        .insight-item strong span { font-size: 1.1em; margin-right: 5px; }
+
+        /* Slide 8 Summary Fixes (3 COLUMNS) */
+        .summary-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; flex: 1; overflow-y: auto; }
+        .summary-col { background: white; border-radius: 16px; padding: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); animation: slideInUp 0.6s ease-out; display: flex; flex-direction: column; }
+        .summary-col:nth-child(1) { border-top: 6px solid #27ae60; animation-delay: 0.1s; }
+        .summary-col:nth-child(2) { border-top: 6px solid #f39c12; animation-delay: 0.2s; }
+        .summary-col:nth-child(3) { border-top: 6px solid #3498db; animation-delay: 0.3s; }
+        
+        .list-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; font-size: 0.9rem; list-style: none; padding-bottom: 8px; border-bottom: 1px dashed #eee; }
+        .list-item:last-child { border-bottom: none; }
+        .list-icon { margin-top: 2px; flex-shrink: 0; }
+        .list-item strong { color: #2c3e50; font-weight: 700; display: block; margin-bottom: 4px; }
+        .list-item p { margin: 0; color: #576574; line-height: 1.4; }
+        .list-item ul { margin: 5px 0 0 0; padding-left: 20px; list-style-type: disc; color: #576574; }
 
         @keyframes titleSlideIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes slideInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
@@ -153,11 +155,9 @@
         @media (max-width: 768px) {
             .slide { padding: 80px 20px 20px 20px; overflow-y: scroll; }
             .main-title h1 { font-size: 2rem; }
-            .product-content, .summary-grid { grid-template-columns: 1fr; }
+            .product-content, .summary-grid-3 { grid-template-columns: 1fr; }
             .product-header { flex-direction: column; gap: 10px; text-align: center; }
-            .product-header-text { text-align: center; }
             .monthly-chart { min-height: 150px; }
-            .mini-product-chart { height: 120px; gap: 5px; }
         }
     </style>
  </head>
@@ -167,7 +167,7 @@
    <div class="kiotviet-logo"><img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg" alt="KiotViet Logo" onerror="this.style.display='none'; this.parentElement.innerText='KiotViet'">
    </div>
    <!-- Slide Indicator -->
-   <div class="slide-indicator"><span id="current-slide">1</span> / <span id="total-slides">10</span>
+   <div class="slide-indicator"><span id="current-slide">1</span> / <span id="total-slides">9</span>
    </div>
    <!-- Slide 1: Title Slide -->
    <div class="slide active" id="slide-1">
@@ -238,52 +238,35 @@
      <h3 class="chart-title">Phân bổ lớp học theo tháng (Tập trung Quý 3 &amp; 4)</h3>
      <div class="monthly-chart">
       <!-- Dummy data for first half of year -->
-      <div class="month-bar" style="height: 5%; opacity: 0.3;" data-delay="0.1s"><span class="month-label">T1</span>
-      </div>
-      <div class="month-bar" style="height: 5%; opacity: 0.3;" data-delay="0.1s"><span class="month-label">T2</span>
-      </div>
-      <div class="month-bar" style="height: 5%; opacity: 0.3;" data-delay="0.1s"><span class="month-label">T3</span>
-      </div>
-      <div class="month-bar" style="height: 5%; opacity: 0.3;" data-delay="0.1s"><span class="month-label">T4</span>
-      </div>
-      <div class="month-bar" style="height: 5%; opacity: 0.3;" data-delay="0.1s"><span class="month-label">T5</span>
-      </div>
-      <div class="month-bar" style="height: 5%; opacity: 0.3;" data-delay="0.1s"><span class="month-label">T6</span>
-      </div>
+      <div class="month-bar" style="height: 5%; opacity: 0.3;" data-delay="0.1s"><span class="month-label">T1</span></div>
+      <div class="month-bar" style="height: 5%; opacity: 0.3;" data-delay="0.1s"><span class="month-label">T2</span></div>
+      <div class="month-bar" style="height: 5%; opacity: 0.3;" data-delay="0.1s"><span class="month-label">T3</span></div>
+      <div class="month-bar" style="height: 5%; opacity: 0.3;" data-delay="0.1s"><span class="month-label">T4</span></div>
+      <div class="month-bar" style="height: 5%; opacity: 0.3;" data-delay="0.1s"><span class="month-label">T5</span></div>
+      <div class="month-bar" style="height: 5%; opacity: 0.3;" data-delay="0.1s"><span class="month-label">T6</span></div>
       <!-- Real Data Jul - Nov -->
       <div class="month-bar highlight-bar" style="height: 70%;" data-delay="0.2s"><span class="month-label">T7</span>
-       <div class="month-tooltip">
-        Tháng 7: 5 lớp<br>(Retail: 4, FNB HW: 1)
-       </div>
+       <div class="month-tooltip">Tháng 7: 5 lớp<br>(Retail: 4, FNB HW: 1)</div>
       </div>
       <div class="month-bar highlight-bar" style="height: 45%;" data-delay="0.3s"><span class="month-label">T8</span>
-       <div class="month-tooltip">
-        Tháng 8: 3 lớp<br>(Retail: 2, FNB SW: 1)
-       </div>
+       <div class="month-tooltip">Tháng 8: 3 lớp<br>(Retail: 2, FNB SW: 1)</div>
       </div>
       <div class="month-bar highlight-bar" style="height: 55%;" data-delay="0.4s"><span class="month-label">T9</span>
-       <div class="month-tooltip">
-        Tháng 9: 4 lớp<br>(Retail: 3, FNB SW: 1)
-       </div>
+       <div class="month-tooltip">Tháng 9: 4 lớp<br>(Retail: 3, FNB SW: 1)</div>
       </div>
       <div class="month-bar highlight-bar" style="height: 100%;" data-delay="0.5s"><span class="month-label">T10</span>
-       <div class="month-tooltip">
-        Tháng 10: 7 lớp (Cao điểm)<br>Retail, FNB, Salon, Hotel, E-Invoice
-       </div>
+       <div class="month-tooltip">Tháng 10: 7 lớp (Cao điểm)<br>Retail, FNB, Salon, Hotel, E-Invoice</div>
       </div>
       <div class="month-bar highlight-bar" style="height: 85%;" data-delay="0.6s"><span class="month-label">T11</span>
-       <div class="month-tooltip">
-        Tháng 11: 6 lớp<br>Retail, FNB, Salon, Hotel
-       </div>
+       <div class="month-tooltip">Tháng 11: 6 lớp<br>Retail, FNB, Salon, Hotel</div>
       </div>
       <div class="month-bar" style="height: 0%; border: 1px dashed #ccc; background: none;" data-delay="0.7s"><span class="month-label">T12</span>
-       <div class="month-tooltip">
-        Kế hoạch T12
-       </div>
+       <div class="month-tooltip">Kế hoạch T12</div>
       </div>
      </div>
     </div>
    </div>
+
    <!-- Slide 3: KiotViet Retail -->
    <div class="slide" id="slide-3">
     <div class="product-slide" style="--product-color: #3498db;">
@@ -297,7 +280,6 @@
       <div class="metrics-card">
        <div class="card-title">
            <span>📊 Thống Kê Chi Tiết</span>
-           <!-- BỘ LỌC ĐỦ THÁNG -->
            <select class="month-filter" onchange="filterData('retail', this.value)">
                <option value="all">Tất cả (T7-T11)</option>
                <option value="7">Tháng 7</option>
@@ -326,37 +308,36 @@
            </div>
            <div class="month-bar empty-data"><span class="month-label">T12</span></div>
        </div>
-
        <div class="mini-stats" id="stats-retail">
-        <div class="mini-stat">
-         <div class="mini-stat-value" id="retail-classes">15</div>
-         <div class="mini-stat-label">Lớp học</div>
-         <div class="stat-explanation-tooltip" id="retail-classes-note">Tổng số lớp từ T7-T11</div>
-        </div>
-        <div class="mini-stat">
-         <div class="mini-stat-value" id="retail-score">91%</div>
-         <div class="mini-stat-label">Điểm Test</div>
-         <div class="stat-explanation-tooltip" id="retail-score-note">Điểm trung bình các bài kiểm tra</div>
-        </div>
-        <div class="mini-stat">
-         <div class="mini-stat-value" id="retail-pass">98%</div>
-         <div class="mini-stat-label">Tỷ lệ đạt</div>
-         <div class="stat-explanation-tooltip" id="retail-pass-note">Học viên đạt trên 80% điểm</div>
-        </div>
-        <div class="mini-stat">
-         <div class="mini-stat-value" id="retail-sat">4.8/5</div>
-         <div class="mini-stat-label">Hài lòng</div>
-         <div class="stat-explanation-tooltip" id="retail-sat-note">Đánh giá sau khóa học</div>
-        </div>
+        <div class="mini-stat"><div class="mini-stat-value" id="retail-classes">15</div><div class="mini-stat-label">Lớp học</div><div class="stat-explanation-tooltip" id="retail-classes-note">Tổng số lớp từ T7-T11</div></div>
+        <div class="mini-stat"><div class="mini-stat-value" id="retail-score">91%</div><div class="mini-stat-label">Điểm Test</div><div class="stat-explanation-tooltip" id="retail-score-note">Điểm trung bình các bài kiểm tra</div></div>
+        <div class="mini-stat"><div class="mini-stat-value" id="retail-pass">98%</div><div class="mini-stat-label">Tỷ lệ đạt</div><div class="stat-explanation-tooltip" id="retail-pass-note">Học viên đạt trên 80% điểm</div></div>
+        <div class="mini-stat"><div class="mini-stat-value" id="retail-sat">4.8/5</div><div class="mini-stat-label">Hài lòng</div><div class="stat-explanation-tooltip" id="retail-sat-note">Đánh giá sau khóa học</div></div>
        </div>
       </div>
       <div class="analysis-card">
        <h3 class="card-title">🎯 Phân tích &amp; Insight</h3>
        <div class="insights">
-        <div class="insight-item positive"><span class="insight-icon">✅</span> <span>Chuyển đổi thành công sang LMS tập trung. Học viên chủ động ôn tập và làm bài.</span></div>
-        <div class="insight-item neutral"><span class="insight-icon">💡</span> <span>Đã xây dựng lộ trình hướng dẫn học trên LMS để khắc phục tình trạng bỡ ngỡ ban đầu của học viên.</span></div>
-        <div class="insight-item neutral"><span class="insight-icon">🔧</span> <span>Bổ sung nội dung Phần cứng &amp; Word buổi 3 giúp học viên nắm bắt toàn diện hơn.</span></div>
-        <div class="insight-item positive"><span class="insight-icon">📈</span> <span>Kết quả thử nghiệm Khóa 25KV43 cho tín hiệu rất khả quan.</span></div>
+        <div class="insight-item green">
+            <strong><span>🚀</span>Chuyển dịch phương pháp đào tạo</strong>
+            Chuyển đổi toàn diện từ việc gửi tài liệu rời rạc (Zalo/Nearpod) sang hệ thống LMS tập trung.
+        </div>
+        <div class="insight-item red">
+            <strong><span>⚠️</span>Khắc phục bất cập</strong>
+            Học viên từng gặp khó khi thao tác LMS -> Đã thiết kế tài liệu Onboarding gửi trước khi học -> Quy trình hiện tại rất mượt mà.
+        </div>
+        <div class="insight-item green">
+            <strong><span>⏳</span>Cải thiện hiệu quả</strong>
+            Thu thập kết quả Quiz sau mỗi buổi nhanh hơn, tiết kiệm thời gian quản lý.
+        </div>
+        <div class="insight-item green">
+            <strong><span>📈</span>Kết quả thử nghiệm (Khóa 25KV43)</strong>
+            Đã bổ sung nội dung Thiết lập Phần cứng + Quiz Buổi 3 lên LMS. Học viên tiếp thu tốt và chủ động hơn.
+        </div>
+        <div class="insight-item blue">
+            <strong><span>📅</span>Mong muốn sắp tới</strong>
+            Đẩy thêm tính năng nâng cao (Lô-HSD, Voucher/Khuyến mãi...) để học viên trau dồi thêm kiến thức.
+        </div>
        </div>
       </div>
      </div>
@@ -369,14 +350,13 @@
      <div class="product-header"><span class="product-icon">🍽️</span>
       <div class="product-header-text">
        <h2 class="product-title">2. KiotViet FNB</h2>
-       <p class="slide-subtitle">Nhà hàng &amp; Ăn uống</p>
+       <p class="slide-subtitle">Nhà hàng &amp; Ăn uống - Định hướng chia tách Phần cứng &amp; Phần mềm</p>
       </div>
      </div>
      <div class="product-content">
       <div class="metrics-card">
        <div class="card-title">
            <span>📊 Thống Kê Chi Tiết</span>
-           <!-- BỘ LỌC ĐỦ THÁNG -->
            <select class="month-filter" onchange="filterData('fnb', this.value)">
                <option value="all">Tất cả (T7-T11)</option>
                <option value="7">Tháng 7</option>
@@ -388,54 +368,43 @@
        </div>
        <p style="text-align: center; color: #7f8c8d; font-size: 0.9rem; margin-bottom: 10px;">Phân bổ học viên theo tháng</p>
        <div class="mini-product-chart" id="chart-fnb">
-           <div class="month-bar" style="height: 75%; background: #e67e22;" data-month="7"><span class="month-label">T7</span>
-               <div class="month-tooltip"><span class="tooltip-title">Tháng 7</span><div class="tooltip-row"><span>• PC:</span> <b>24 HV</b></div></div>
-           </div>
-           <div class="month-bar" style="height: 87%; background: #e67e22;" data-month="8"><span class="month-label">T8</span>
-               <div class="month-tooltip"><span class="tooltip-title">Tháng 8</span><div class="tooltip-row"><span>• PM:</span> <b>28 HV</b></div></div>
-           </div>
-           <div class="month-bar" style="height: 100%; background: #e67e22;" data-month="9"><span class="month-label">T9</span>
-               <div class="month-tooltip"><span class="tooltip-title">Tháng 9</span><div class="tooltip-row"><span>• PM:</span> <b>32 HV</b></div></div>
-           </div>
-           <div class="month-bar" style="height: 87%; background: #e67e22;" data-month="10"><span class="month-label">T10</span>
-               <div class="month-tooltip"><span class="tooltip-title">Tháng 10</span><div class="tooltip-row"><span>• PM:</span> <b>28 HV</b></div></div>
-           </div>
-           <div class="month-bar" style="height: 62%; background: #e67e22;" data-month="11"><span class="month-label">T11</span>
-               <div class="month-tooltip"><span class="tooltip-title">Tháng 11</span><div class="tooltip-row"><span>• PM:</span> <b>20 HV</b></div></div>
-           </div>
+           <div class="month-bar" style="height: 75%; background: #e67e22;" data-month="7"><span class="month-label">T7</span><div class="month-tooltip"><span class="tooltip-title">Tháng 7</span><div class="tooltip-row"><span>• PC:</span> <b>24 HV</b></div></div></div>
+           <div class="month-bar" style="height: 87%; background: #e67e22;" data-month="8"><span class="month-label">T8</span><div class="month-tooltip"><span class="tooltip-title">Tháng 8</span><div class="tooltip-row"><span>• PM:</span> <b>28 HV</b></div></div></div>
+           <div class="month-bar" style="height: 100%; background: #e67e22;" data-month="9"><span class="month-label">T9</span><div class="month-tooltip"><span class="tooltip-title">Tháng 9</span><div class="tooltip-row"><span>• PM:</span> <b>32 HV</b></div></div></div>
+           <div class="month-bar" style="height: 87%; background: #e67e22;" data-month="10"><span class="month-label">T10</span><div class="month-tooltip"><span class="tooltip-title">Tháng 10</span><div class="tooltip-row"><span>• PM:</span> <b>28 HV</b></div></div></div>
+           <div class="month-bar" style="height: 62%; background: #e67e22;" data-month="11"><span class="month-label">T11</span><div class="month-tooltip"><span class="tooltip-title">Tháng 11</span><div class="tooltip-row"><span>• PM:</span> <b>20 HV</b></div></div></div>
            <div class="month-bar empty-data"><span class="month-label">T12</span></div>
        </div>
-
        <div class="mini-stats" id="stats-fnb">
-        <div class="mini-stat">
-         <div class="mini-stat-value" id="fnb-total">132</div>
-         <div class="mini-stat-label">Tổng HV</div>
-         <div class="stat-explanation-tooltip" id="fnb-total-note">Bao gồm cả lớp Phần mềm & Phần cứng</div>
-        </div>
-        <div class="mini-stat">
-         <div class="mini-stat-value" id="fnb-sw">108</div>
-         <div class="mini-stat-label">HV P.Mềm</div>
-         <div class="stat-explanation-tooltip" id="fnb-sw-note">Chiếm 82% tổng số học viên</div>
-        </div>
-        <div class="mini-stat">
-         <div class="mini-stat-value" id="fnb-score">89%</div>
-         <div class="mini-stat-label">Điểm TB</div>
-         <div class="stat-explanation-tooltip" id="fnb-score-note">Điểm trung bình các bài kiểm tra</div>
-        </div>
-        <div class="mini-stat">
-         <div class="mini-stat-value" id="fnb-sat">4.7/5</div>
-         <div class="mini-stat-label">Hài lòng</div>
-         <div class="stat-explanation-tooltip" id="fnb-sat-note">Đánh giá sau khóa học</div>
-        </div>
+        <div class="mini-stat"><div class="mini-stat-value" id="fnb-total">132</div><div class="mini-stat-label">Tổng HV</div><div class="stat-explanation-tooltip" id="fnb-total-note">Bao gồm cả lớp Phần mềm & Phần cứng</div></div>
+        <div class="mini-stat"><div class="mini-stat-value" id="fnb-sw">108</div><div class="mini-stat-label">HV P.Mềm</div><div class="stat-explanation-tooltip" id="fnb-sw-note">Chiếm 82% tổng số học viên</div></div>
+        <div class="mini-stat"><div class="mini-stat-value" id="fnb-score">89%</div><div class="mini-stat-label">Điểm TB</div><div class="stat-explanation-tooltip" id="fnb-score-note">Điểm trung bình các bài kiểm tra</div></div>
+        <div class="mini-stat"><div class="mini-stat-value" id="fnb-sat">4.7/5</div><div class="mini-stat-label">Hài lòng</div><div class="stat-explanation-tooltip" id="fnb-sat-note">Đánh giá sau khóa học</div></div>
        </div>
       </div>
       <div class="analysis-card">
        <h3 class="card-title">🎯 Phân tích &amp; Insight</h3>
        <div class="insights">
-        <div class="insight-item negative"><span class="insight-icon">⚠️</span> <span>Lớp phần cứng (Offline): Một số học viên kỳ vọng chuyên sâu thay vì cơ bản. -> Đã đẩy video chi tiết lên LMS.</span></div>
-        <div class="insight-item neutral"><span class="insight-icon">🔄</span> <span>Phương pháp mới: Video luồng 6 bước cơ bản được đưa lên LMS để tự học &amp; thi.</span></div>
-        <div class="insight-item positive"><span class="insight-icon">🚀</span> <span>Lớp Online sẽ tập trung vào tính năng nâng cao (Hàng hóa đặc thù/ Thực Đơn Điện Tử/ GrabFood/...)</span></div>
-        <div class="insight-item positive"><span class="insight-icon">📚</span> <span>Đầy đủ tài liệu &amp; Quiz cho từng video phần cứng (Máy in, POS, Két tiền...).</span></div>
+        <div class="insight-item red">
+            <strong><span>⚠️</span>Phần Cứng: Bài học kinh nghiệm</strong>
+            Lớp Offline đầu tiên có sự lệch pha về kỳ vọng (HV muốn học nâng cao). Lớp Online chưa triển khai được nhiều do vấn đề phát sinh.
+        </div>
+        <div class="insight-item green">
+            <strong><span>✅</span>Phần Cứng: Tối ưu hóa</strong>
+            Đã chuyển toàn bộ nội dung (POS, Màn QR, Máy in...) thành Video + Quiz trên LMS để HV tự học.
+        </div>
+        <div class="insight-item green">
+            <strong><span>🔄</span>Phần Mềm: Nền tảng LMS</strong>
+            Chuyển đổi toàn diện (Demo cơ bản + Quiz + Tài liệu) sang LMS tập trung giúp HV tự học và tiết kiệm nguồn lực tổ chức.
+        </div>
+        <div class="insight-item blue">
+            <strong><span>📅</span>Phần Mềm: Kế hoạch nâng cao</strong>
+            Cập nhật tính năng: Thực đơn điện tử, tích hợp Food App. Tập trung đào tạo nghiệp vụ vận hành theo mô hình (Quick vs Full Service).
+        </div>
+        <div class="insight-item blue">
+            <strong><span>🎯</span>Mục tiêu</strong>
+            "Đào tạo ra người bán giải pháp toàn diện chứ không chỉ bán phần mềm.”
+        </div>
        </div>
       </div>
      </div>
@@ -455,7 +424,6 @@
       <div class="metrics-card">
        <div class="card-title">
            <span>📊 Thống Kê Chi Tiết</span>
-           <!-- BỘ LỌC ĐỦ THÁNG -->
            <select class="month-filter" onchange="filterData('salon', this.value)">
                <option value="all">Tất cả (T7-T11)</option>
                <option value="7">Tháng 7</option>
@@ -467,56 +435,39 @@
        </div>
        <p style="text-align: center; color: #7f8c8d; font-size: 0.9rem; margin-bottom: 10px;">Biểu đồ triển khai</p>
        <div class="mini-product-chart" id="chart-salon">
-           <!-- FIX: TÁCH RIÊNG THÁNG 7,8,9 -->
-           <div class="month-bar empty-data" data-month="7"><span class="month-label">T7</span>
-                <div class="month-tooltip">Chưa triển khai</div>
-           </div>
-           <div class="month-bar empty-data" data-month="8"><span class="month-label">T8</span>
-                <div class="month-tooltip">Chưa triển khai</div>
-           </div>
-           <div class="month-bar empty-data" data-month="9"><span class="month-label">T9</span>
-                <div class="month-tooltip">Chưa triển khai</div>
-           </div>
-           <!-- T10: 13 (MAX) -->
-           <div class="month-bar" style="height: 100%; background: #9b59b6;" data-month="10"><span class="month-label">T10</span>
-               <div class="month-tooltip"><span class="tooltip-title">Tháng 10</span><div class="tooltip-row"><span>• Salon:</span> <b>13 HV</b></div></div>
-           </div>
-           <!-- T11: 7 -->
-           <div class="month-bar" style="height: 53%; background: #9b59b6;" data-month="11"><span class="month-label">T11</span>
-               <div class="month-tooltip"><span class="tooltip-title">Tháng 11</span><div class="tooltip-row"><span>• Salon:</span> <b>07 HV</b></div></div>
-           </div>
+           <div class="month-bar empty-data" data-month="7"><span class="month-label">T7</span><div class="month-tooltip">Chưa triển khai</div></div>
+           <div class="month-bar empty-data" data-month="8"><span class="month-label">T8</span><div class="month-tooltip">Chưa triển khai</div></div>
+           <div class="month-bar empty-data" data-month="9"><span class="month-label">T9</span><div class="month-tooltip">Chưa triển khai</div></div>
+           <div class="month-bar" style="height: 100%; background: #9b59b6;" data-month="10"><span class="month-label">T10</span><div class="month-tooltip"><span class="tooltip-title">Tháng 10</span><div class="tooltip-row"><span>• Salon:</span> <b>13 HV</b></div></div></div>
+           <div class="month-bar" style="height: 53%; background: #9b59b6;" data-month="11"><span class="month-label">T11</span><div class="month-tooltip"><span class="tooltip-title">Tháng 11</span><div class="tooltip-row"><span>• Salon:</span> <b>07 HV</b></div></div></div>
            <div class="month-bar empty-data"><span class="month-label">T12</span></div>
        </div>
-
        <div class="mini-stats" id="stats-salon">
-        <div class="mini-stat">
-         <div class="mini-stat-value" id="salon-classes">2</div>
-         <div class="mini-stat-label">Lớp</div>
-         <div class="stat-explanation-tooltip" id="salon-classes-note">Các lớp tập trung tháng 10 & 11</div>
-        </div>
-        <div class="mini-stat">
-         <div class="mini-stat-value" id="salon-students">20</div>
-         <div class="mini-stat-label">Học viên</div>
-         <div class="stat-explanation-tooltip" id="salon-students-note">Tổng số học viên tham gia</div>
-        </div>
-        <div class="mini-stat">
-         <div class="mini-stat-value" id="salon-score">92%</div>
-         <div class="mini-stat-label">Điểm thi</div>
-         <div class="stat-explanation-tooltip" id="salon-score-note">Kết quả test khá cao</div>
-        </div>
-        <div class="mini-stat">
-         <div class="mini-stat-value" id="salon-sat">4.9/5</div>
-         <div class="mini-stat-label">Hài lòng</div>
-         <div class="stat-explanation-tooltip" id="salon-sat-note">Điểm phản hồi rất tích cực</div>
-        </div>
+        <div class="mini-stat"><div class="mini-stat-value" id="salon-classes">2</div><div class="mini-stat-label">Lớp</div><div class="stat-explanation-tooltip" id="salon-classes-note">Các lớp tập trung tháng 10 & 11</div></div>
+        <div class="mini-stat"><div class="mini-stat-value" id="salon-students">20</div><div class="mini-stat-label">Học viên</div><div class="stat-explanation-tooltip" id="salon-students-note">Tổng số học viên tham gia</div></div>
+        <div class="mini-stat"><div class="mini-stat-value" id="salon-score">92%</div><div class="mini-stat-label">Điểm thi</div><div class="stat-explanation-tooltip" id="salon-score-note">Kết quả test khá cao</div></div>
+        <div class="mini-stat"><div class="mini-stat-value" id="salon-sat">4.9/5</div><div class="mini-stat-label">Hài lòng</div><div class="stat-explanation-tooltip" id="salon-sat-note">Điểm phản hồi rất tích cực</div></div>
        </div>
       </div>
       <div class="analysis-card">
        <h3 class="card-title">🎯 Phân tích &amp; Insight</h3>
        <div class="insights">
-        <div class="insight-item neutral"><span class="insight-icon">🤔</span> <span>Chương trình hiện tại được đánh giá là hơi cơ bản và dễ so với nhu cầu thực tế.</span></div>
-        <div class="insight-item positive"><span class="insight-icon">🔄</span> <span>Đã đưa khóa cơ bản lên LMS kèm Quiz (áp dụng từ tháng 12).</span></div>
-        <div class="insight-item positive"><span class="insight-icon">📈</span> <span>Kế hoạch: Tập trung xây dựng các bài học nâng cao, nghiệp vụ chuyên sâu hơn cho Salon/Spa.</span></div>
+        <div class="insight-item red">
+            <strong><span>⚠️</span>Đánh giá hiện tại</strong>
+            Nội dung đang ở mức khá cơ bản, chưa đủ độ 'khó' và sâu so với nhu cầu thực tế.
+        </div>
+        <div class="insight-item green">
+            <strong><span>🔄</span>Về nền tảng</strong>
+            Đã chuyển đổi nội dung cơ bản + Quiz sang LMS tập trung. Giúp tiết kiệm nguồn lực tổ chức lớp cơ bản.
+        </div>
+        <div class="insight-item blue">
+            <strong><span>📅</span>Triển khai Tháng 12</strong>
+            Dự kiến áp dụng cho học viên tự học, ôn tập và thi hoàn toàn trên LMS.
+        </div>
+        <div class="insight-item blue">
+            <strong><span>🚀</span>Nội dung nâng cao</strong>
+            Thời gian giảng dạy trực tiếp sẽ dành riêng để đào tạo Module nâng cao, đi sâu vào nghiệp vụ đặc thù.
+        </div>
        </div>
       </div>
      </div>
@@ -536,7 +487,6 @@
       <div class="metrics-card">
        <div class="card-title">
            <span>📊 Thống Kê Chi Tiết</span>
-           <!-- BỘ LỌC ĐỦ THÁNG -->
            <select class="month-filter" onchange="filterData('hotel', this.value)">
                <option value="all">Tất cả (T7-T11)</option>
                <option value="7">Tháng 7</option>
@@ -548,56 +498,39 @@
        </div>
        <p style="text-align: center; color: #7f8c8d; font-size: 0.9rem; margin-bottom: 10px;">Biểu đồ triển khai</p>
        <div class="mini-product-chart" id="chart-hotel">
-           <!-- FIX: TÁCH RIÊNG THÁNG 7,8,9 -->
-           <div class="month-bar empty-data" data-month="7"><span class="month-label">T7</span>
-                <div class="month-tooltip">Chưa triển khai</div>
-           </div>
-           <div class="month-bar empty-data" data-month="8"><span class="month-label">T8</span>
-                <div class="month-tooltip">Chưa triển khai</div>
-           </div>
-           <div class="month-bar empty-data" data-month="9"><span class="month-label">T9</span>
-                <div class="month-tooltip">Chưa triển khai</div>
-           </div>
-           <!-- T10: 9 (MAX) -->
-           <div class="month-bar" style="height: 100%; background: #27ae60;" data-month="10"><span class="month-label">T10</span>
-               <div class="month-tooltip"><span class="tooltip-title">Tháng 10</span><div class="tooltip-row"><span>• Hotel:</span> <b>09 HV</b></div></div>
-           </div>
-           <!-- T11: 6 -->
-           <div class="month-bar" style="height: 66%; background: #27ae60;" data-month="11"><span class="month-label">T11</span>
-               <div class="month-tooltip"><span class="tooltip-title">Tháng 11</span><div class="tooltip-row"><span>• Hotel:</span> <b>06 HV</b></div></div>
-           </div>
+           <div class="month-bar empty-data" data-month="7"><span class="month-label">T7</span><div class="month-tooltip">Chưa triển khai</div></div>
+           <div class="month-bar empty-data" data-month="8"><span class="month-label">T8</span><div class="month-tooltip">Chưa triển khai</div></div>
+           <div class="month-bar empty-data" data-month="9"><span class="month-label">T9</span><div class="month-tooltip">Chưa triển khai</div></div>
+           <div class="month-bar" style="height: 100%; background: #27ae60;" data-month="10"><span class="month-label">T10</span><div class="month-tooltip"><span class="tooltip-title">Tháng 10</span><div class="tooltip-row"><span>• Hotel:</span> <b>09 HV</b></div></div></div>
+           <div class="month-bar" style="height: 66%; background: #27ae60;" data-month="11"><span class="month-label">T11</span><div class="month-tooltip"><span class="tooltip-title">Tháng 11</span><div class="tooltip-row"><span>• Hotel:</span> <b>06 HV</b></div></div></div>
            <div class="month-bar empty-data"><span class="month-label">T12</span></div>
        </div>
-
        <div class="mini-stats" id="stats-hotel">
-        <div class="mini-stat">
-         <div class="mini-stat-value" id="hotel-classes">2</div>
-         <div class="mini-stat-label">Lớp</div>
-         <div class="stat-explanation-tooltip" id="hotel-classes-note">Các lớp tập trung tháng 10 & 11</div>
-        </div>
-        <div class="mini-stat">
-         <div class="mini-stat-value" id="hotel-students">15</div>
-         <div class="mini-stat-label">Học viên</div>
-         <div class="stat-explanation-tooltip" id="hotel-students-note">Quy mô lớp nhỏ để chuyên sâu</div>
-        </div>
-        <div class="mini-stat">
-         <div class="mini-stat-value" id="hotel-score">89%</div>
-         <div class="mini-stat-label">Điểm TB</div>
-         <div class="stat-explanation-tooltip" id="hotel-score-note">Điểm đánh giá kiến thức</div>
-        </div>
-        <div class="mini-stat">
-         <div class="mini-stat-value" id="hotel-sat">4.8/5</div>
-         <div class="mini-stat-label">Hài lòng</div>
-         <div class="stat-explanation-tooltip" id="hotel-sat-note">Đánh giá cao về sự nhiệt tình</div>
-        </div>
+        <div class="mini-stat"><div class="mini-stat-value" id="hotel-classes">2</div><div class="mini-stat-label">Lớp</div><div class="stat-explanation-tooltip" id="hotel-classes-note">Các lớp tập trung tháng 10 & 11</div></div>
+        <div class="mini-stat"><div class="mini-stat-value" id="hotel-students">15</div><div class="mini-stat-label">Học viên</div><div class="stat-explanation-tooltip" id="hotel-students-note">Quy mô lớp nhỏ để chuyên sâu</div></div>
+        <div class="mini-stat"><div class="mini-stat-value" id="hotel-score">89%</div><div class="mini-stat-label">Điểm TB</div><div class="stat-explanation-tooltip" id="hotel-score-note">Điểm đánh giá kiến thức</div></div>
+        <div class="mini-stat"><div class="mini-stat-value" id="hotel-sat">4.8/5</div><div class="mini-stat-label">Hài lòng</div><div class="stat-explanation-tooltip" id="hotel-sat-note">Đánh giá cao về sự nhiệt tình</div></div>
        </div>
       </div>
       <div class="analysis-card">
        <h3 class="card-title">🎯 Phân tích &amp; Insight</h3>
        <div class="insights">
-        <div class="insight-item neutral"><span class="insight-icon">📝</span> <span>Tương tự Salon, nội dung hiện tại còn ở mức cơ bản.</span></div>
-        <div class="insight-item positive"><span class="insight-icon">📲</span> <span>Chiến lược: Chuyển nội dung cơ bản sang tự học trên LMS.</span></div>
-        <div class="insight-item positive"><span class="insight-icon">🚀</span> <span>Dành thời gian đào tạo Online/Offline các nghiệp vụ khó và xử lý tình huống thực tế tại khách sạn.</span></div>
+        <div class="insight-item red">
+            <strong><span>⚠️</span>Đánh giá hiện tại</strong>
+            Tương tự Salon, nội dung hiện tại còn ở mức cơ bản, chưa đủ độ sâu.
+        </div>
+        <div class="insight-item green">
+            <strong><span>🔄</span>Về nền tảng</strong>
+            Đã chuyển đổi nội dung cơ bản + Quiz sang LMS tập trung giúp tiết kiệm nguồn lực.
+        </div>
+        <div class="insight-item blue">
+            <strong><span>📅</span>Triển khai Tháng 12</strong>
+            Dự kiến áp dụng cho học viên tự học và ôn tập trên LMS và thi.
+        </div>
+        <div class="insight-item blue">
+            <strong><span>🚀</span>Nội dung nâng cao</strong>
+            Thời gian giảng dạy trực tiếp sẽ được dành để xây dựng và đào tạo các Module nâng cao.
+        </div>
        </div>
       </div>
      </div>
@@ -617,7 +550,6 @@
       <div class="metrics-card">
        <div class="card-title">
            <span>📊 Thống Kê Chi Tiết</span>
-           <!-- BỘ LỌC ĐỦ THÁNG -->
            <select class="month-filter" onchange="filterData('invoice', this.value)">
                <option value="all">Tất cả (T7-T11)</option>
                <option value="7">Tháng 7</option>
@@ -629,187 +561,141 @@
        </div>
        <p style="text-align: center; color: #7f8c8d; font-size: 0.9rem; margin-bottom: 10px;">Lớp đào tạo duy nhất (Tháng 10)</p>
        <div class="mini-product-chart" id="chart-invoice">
-           <!-- FIX: TÁCH RIÊNG THÁNG 7,8,9 -->
-           <div class="month-bar empty-data" data-month="7"><span class="month-label">T7</span>
-                <div class="month-tooltip">Chưa triển khai</div>
-           </div>
-           <div class="month-bar empty-data" data-month="8"><span class="month-label">T8</span>
-                <div class="month-tooltip">Chưa triển khai</div>
-           </div>
-           <div class="month-bar empty-data" data-month="9"><span class="month-label">T9</span>
-                <div class="month-tooltip">Chưa triển khai</div>
-           </div>
-           <!-- T10: 43 (MAX) -->
-           <div class="month-bar" style="height: 100%; background: #34495e;" data-month="10"><span class="month-label">T10</span>
-               <div class="month-tooltip"><span class="tooltip-title">Tháng 10</span><div class="tooltip-row"><span>• HĐĐT:</span> <b>43 HV</b></div><span class="tooltip-highlight" style="color: #f1c40f; background: rgba(241, 196, 15, 0.1);">⚠️ Chưa có điểm Pass</span></div>
-           </div>
-           <div class="month-bar empty-data" data-month="11"><span class="month-label">T11</span>
-                <div class="month-tooltip">Chưa triển khai</div>
-           </div>
+           <div class="month-bar empty-data" data-month="7"><span class="month-label">T7</span><div class="month-tooltip">Chưa triển khai</div></div>
+           <div class="month-bar empty-data" data-month="8"><span class="month-label">T8</span><div class="month-tooltip">Chưa triển khai</div></div>
+           <div class="month-bar empty-data" data-month="9"><span class="month-label">T9</span><div class="month-tooltip">Chưa triển khai</div></div>
+           <div class="month-bar" style="height: 100%; background: #34495e;" data-month="10"><span class="month-label">T10</span><div class="month-tooltip"><span class="tooltip-title">Tháng 10</span><div class="tooltip-row"><span>• HĐĐT:</span> <b>43 HV</b></div><span class="tooltip-highlight" style="color: #f1c40f; background: rgba(241, 196, 15, 0.1);">⚠️ Chưa có điểm Pass</span></div></div>
+           <div class="month-bar empty-data" data-month="11"><span class="month-label">T11</span><div class="month-tooltip">Chưa triển khai</div></div>
            <div class="month-bar empty-data"><span class="month-label">T12</span></div>
        </div>
-
        <div class="mini-stats" id="stats-invoice">
-        <div class="mini-stat">
-         <div class="mini-stat-value" id="invoice-classes">1</div>
-         <div class="mini-stat-label">Lớp (T10)</div>
-         <div class="stat-explanation-tooltip" id="invoice-classes-note">Lớp đào tạo tập trung duy nhất</div>
-        </div>
-        <div class="mini-stat">
-         <div class="mini-stat-value" id="invoice-students">43</div>
-         <div class="mini-stat-label">Học viên</div>
-         <div class="stat-explanation-tooltip" id="invoice-students-note">Số lượng học viên tham gia T10</div>
-        </div>
-        <div class="mini-stat">
-         <div class="mini-stat-value" id="invoice-test">T12</div>
-         <div class="mini-stat-label">Bắt đầu Test</div>
-         <div class="stat-explanation-tooltip" id="invoice-test-note">Sẽ triển khai bài test từ T12</div>
-        </div>
-        <div class="mini-stat">
-         <div class="mini-stat-value" id="invoice-sat">4.5/5</div>
-         <div class="mini-stat-label">Hài lòng</div>
-         <div class="stat-explanation-tooltip" id="invoice-sat-note">Phản hồi tích cực nhưng cần cải thiện</div>
-        </div>
+        <div class="mini-stat"><div class="mini-stat-value" id="invoice-classes">1</div><div class="mini-stat-label">Lớp (T10)</div><div class="stat-explanation-tooltip" id="invoice-classes-note">Lớp đào tạo tập trung duy nhất</div></div>
+        <div class="mini-stat"><div class="mini-stat-value" id="invoice-students">43</div><div class="mini-stat-label">Học viên</div><div class="stat-explanation-tooltip" id="invoice-students-note">Số lượng học viên tham gia T10</div></div>
+        <div class="mini-stat"><div class="mini-stat-value" id="invoice-test">T12</div><div class="mini-stat-label">Bắt đầu Test</div><div class="stat-explanation-tooltip" id="invoice-test-note">Sẽ triển khai bài test từ T12</div></div>
+        <div class="mini-stat"><div class="mini-stat-value" id="invoice-sat">4.5/5</div><div class="mini-stat-label">Hài lòng</div><div class="stat-explanation-tooltip" id="invoice-sat-note">Phản hồi tích cực nhưng cần cải thiện</div></div>
        </div>
       </div>
       <div class="analysis-card">
        <h3 class="card-title">🎯 Phân tích &amp; Insight</h3>
        <div class="insights">
-        <div class="insight-item negative"><span class="insight-icon">⚠️</span> <span>Đặc thù nghiệp vụ khó, chỉ học qua LMS là chưa đủ.</span></div>
-        <div class="insight-item positive"><span class="insight-icon">🤝</span> <span>Áp dụng hình thức: Học viên tự học lý thuyết trên LMS + Giảng viên Demo trực tiếp online để giải thích chi tiết.</span></div>
-        <div class="insight-item neutral"><span class="insight-icon">📅</span> <span>Tháng 12: Chính thức áp dụng bài Test sau khóa đào tạo để đánh giá năng lực cho Khóa mới.</span></div>
+        <div class="insight-item red">
+            <strong><span>⚠️</span>Đặc thù sản phẩm</strong>
+            Đây là sản phẩm khó, liên quan đến pháp lý nên không thể phó mặc hoàn toàn cho LMS.
+        </div>
+        <div class="insight-item green">
+            <strong><span>🤝</span>Phương pháp đào tạo</strong>
+            Tài liệu đã lên LMS. Học viên tự xem trước lý thuyết, sau đó tham gia Demo Online trực tiếp để được giải thích cặn kẽ.
+        </div>
+        <div class="insight-item blue">
+            <strong><span>📅</span>Tổ chức test</strong>
+            Khóa tháng 12 sẽ chính thức áp dụng bài Test sau khóa để đảm bảo chất lượng đầu ra chặt chẽ hơn.
+        </div>
        </div>
       </div>
      </div>
     </div>
    </div>
    
-   <!-- Slide 8: Summary (ĐÃ SỬA LỖI LAYOUT) -->
+   <!-- Slide 8: Summary & Plan (MERGED) -->
    <div class="slide" id="slide-8">
     <div class="slide-header">
-     <h1 class="slide-title">II. Tổng Kết &amp; Bài Học Kinh Nghiệm</h1>
+     <h1 class="slide-title">II. Tổng Kết &amp; Kế Hoạch Sắp Tới</h1>
+     <p class="slide-subtitle">Tổng hợp kết quả, định hướng phát triển kiến thức và lộ trình 2026</p>
     </div>
-    <div class="summary-grid">
-     <div class="achievement-card">
-      <h3 class="card-title">🏆 Kết Quả Đạt Được</h3>
-      <div class="list-item"><span class="list-icon">✅</span>
+    <div class="summary-grid-3">
+     <!-- Cột 1: Kết quả đạt được -->
+     <div class="summary-col">
+      <h3 class="card-title" style="color: #27ae60;">🏆 1. Kết quả đạt được</h3>
+      
+      <div class="list-item">
+       <div class="list-icon">✅</div>
        <div><strong>Tiếp nhận chương trình Đào tạo:</strong>
+           <p>Đã tiếp nhận thành công các lớp Retail, FNB, Salon, Hotel, HĐĐT.</p>
            <ul>
-               <li>Đã tiếp nhận Đào tạo thành công các lớp sản phẩm của ngành hàng Retail, FNB, Salon, Hotel, Hóa đơn Điện Tử.</li>
-               <li>Hoàn thành đào tạo: 577 học viên.</li>
-               <li>Tỷ lệ Pass sau khóa: 97%.</li>
-               <li>Điểm hài lòng của học viên: 4.8/5.</li>
+               <li>Đào tạo: 577 học viên.</li>
+               <li>Tỷ lệ Pass: 97%.</li>
+               <li>Hài lòng: 4.8/5.</li>
            </ul>
        </div>
       </div>
-      <div class="list-item"><span class="list-icon">💻</span>
+
+      <div class="list-item">
+       <div class="list-icon">💻</div>
        <div><strong>Chuyển đổi số hóa (LMS):</strong>
+           <p>Đưa thành công nội dung cơ bản các ngành lên LMS.</p>
            <ul>
-               <li>Đưa thành công nội dung Đào tạo sản phẩm cơ bản các ngành Retail, FNB Phần mềm, FNB Phần cứng, Salon, Hotel lên LMS.</li>
                <li>Hoàn thiện Quiz ôn tập.</li>
-               <li>Cung cấp tài liệu tham khảo và ôn tập đầy đủ.</li>
+               <li>Cung cấp đủ tài liệu tham khảo.</li>
            </ul>
        </div>
       </div>
-      <!-- ĐÃ THÊM LẠI MỤC NỘI DUNG GIẢNG DẠY -->
-      <div class="list-item"><span class="list-icon">📚</span>
+
+      <div class="list-item">
+       <div class="list-icon">📚</div>
        <div><strong>Nội dung giảng dạy:</strong>
-           <ul>
-               <li>Hỗ trợ quay dựng Video về sản phẩm các ngành FNB, Salon, Hotel trên giao diện mới.</li>
-           </ul>
+           <p>Hỗ trợ quay dựng Video về sản phẩm FNB, Salon, Hotel giao diện mới.</p>
        </div>
       </div>
+
+      <div class="list-item">
+        <div class="list-icon">🤖</div>
+        <div><strong>Ứng dụng AI:</strong>
+            <p>Nắm bắt kịp thời kiến thức AI để vận dụng vào đào tạo.</p>
+        </div>
+       </div>
+
      </div>
-     <div class="improvement-card">
-      <h3 class="card-title">🔧 Cần Cải Thiện</h3>
-      <div class="list-item"><span class="list-icon">🔄</span>
-       <div><strong>Quy trình Onboarding LMS:</strong><br>
-         Cần gửi hướng dẫn sử dụng LMS trước để tránh mất thời gian hướng dẫn lắt nhắt trong buổi học.
+
+     <!-- Cột 2: Trao dồi kiến thức -->
+     <div class="summary-col">
+      <h3 class="card-title" style="color: #f39c12;">🧠 2. Trao dồi kiến thức</h3>
+      <div class="list-item">
+       <div class="list-icon">💡</div>
+       <div><strong>Mục tiêu cốt lõi:</strong>
+           <p>Cần trau dồi thêm kiến thức sản phẩm chuyên sâu để có 1 năm 2026 bùng nổ hơn.</p>
        </div>
       </div>
-      <div class="list-item"><span class="list-icon">📢</span>
-       <div><strong>Truyền thông nội dung:</strong><br>
-         Cần làm rõ mục tiêu từng buổi (VD: FNB Phần cứng cơ bản) để quản lý kỳ vọng của học viên.
+      <div class="list-item">
+        <div class="list-icon">🔥</div>
+        <div><strong>Chủ động nâng cấp bản thân:</strong>
+            <p>Không chỉ dừng lại ở tính năng cơ bản, cần hiểu sâu về nghiệp vụ để đào tạo giải pháp.</p>
+        </div>
+       </div>
+     </div>
+
+     <!-- Cột 3: Kế hoạch sắp tới -->
+     <div class="summary-col">
+      <h3 class="card-title" style="color: #3498db;">🚀 3. Kế hoạch sắp tới</h3>
+      <div class="list-item">
+       <div class="list-icon">📝</div>
+       <div><strong>Cập nhật đề thi 2026:</strong>
+           <p>Rà soát và làm mới bộ đề thi cho tất cả các ngành hàng.</p>
        </div>
       </div>
-      <div class="list-item"><span class="list-icon">📈</span>
-       <div><strong>Độ sâu kiến thức:</strong><br>
-         Nội dung Salon/Hotel/FNB hiện tại còn cơ bản, cần bổ sung các module nâng cao và mô hình chuyên sâu.
+      <div class="list-item">
+       <div class="list-icon">📂</div>
+       <div><strong>Kho bài giảng nâng cao:</strong>
+           <p>Xây dựng tài nguyên đào tạo chuyên sâu cho các ngành.</p>
        </div>
       </div>
+      <div class="list-item">
+        <div class="list-icon">🍽️</div>
+        <div><strong>FNB Chuyên sâu:</strong>
+            <p>Tập trung xây dựng & triển khai bài giảng nghiệp vụ theo từng mô hình kinh doanh.</p>
+        </div>
+       </div>
+       <div class="list-item">
+        <div class="list-icon">🎓</div>
+        <div><strong>Lớp nâng cao:</strong>
+            <p>Tiếp nhận chuyển giao thêm một số lớp đào tạo nâng cao.</p>
+        </div>
+       </div>
      </div>
     </div>
    </div>
    
-   <!-- Slide 9: Next Steps -->
+   <!-- Slide 9: Thank You (Renumbered) -->
    <div class="slide" id="slide-9">
-    <div class="slide-header">
-     <h1 class="slide-title">III. Kế Hoạch &amp; Định Hướng Sắp Tới</h1>
-     <p class="slide-subtitle">Chiến lược đào tạo giai đoạn tiếp theo (Tháng 12/2025 &amp; 2026)</p>
-    </div>
-    <div class="nextstep-grid">
-     <div class="step-card">
-      <div class="step-header">
-       <div class="step-icon">
-        🎓
-       </div>
-       <h3 class="step-title">Phương pháp học tập</h3>
-      </div>
-      <div class="step-content">
-       <ul class="step-list">
-        <li><strong>Cơ bản:</strong> Tự học Video &amp; làm Quiz trên LMS (FNB Phần mềm, FNB Phần cứng, Salon, Hotel).</li>
-        <li><strong>Nâng cao:</strong> Tổ chức lớp Online/Offline tập trung vào giải pháp, mô hình chuyên sâu và Demo tính năng khó.</li>
-       </ul>
-      </div>
-     </div>
-     <div class="step-card">
-      <div class="step-header">
-       <div class="step-icon">
-        🍽️
-       </div>
-       <h3 class="step-title">FNB Chuyên Sâu</h3>
-      </div>
-      <div class="step-content">
-       <ul class="step-list">
-        <li>Phân tách đào tạo theo mô hình cụ thể (Quick Service & Full Service).</li>
-        <li>Đào tạo tích hợp nâng cao (Dịch vụ tính giờ, Combo Tùy chọn, Buffet...).</li>
-        <li>Tư vấn giải pháp toàn diện thay vì chỉ bán tính năng.</li>
-       </ul>
-      </div>
-     </div>
-     <div class="step-card">
-      <div class="step-header">
-       <div class="step-icon">
-        📄
-       </div>
-       <h3 class="step-title">Hóa Đơn Điện Tử</h3>
-      </div>
-      <div class="step-content">
-       <ul class="step-list">
-        <li>Duy trì lớp Demo trực tiếp do tính chất nghiệp vụ phức tạp.</li>
-        <li>Chính thức áp dụng bài Test sau khóa từ tháng 12.</li>
-       </ul>
-      </div>
-     </div>
-     <div class="step-card">
-      <div class="step-header">
-       <div class="step-icon">
-        🛍️
-       </div>
-       <h3 class="step-title">Khác</h3>
-      </div>
-      <div class="step-content">
-       <ul class="step-list">
-        <li>Cập nhật lại đề thi 2026 cho các ngành.</li>
-        <li>Xây dựng kho bài giảng nâng cao cho các ngành.</li>
-       </ul>
-      </div>
-     </div>
-    </div>
-   </div>
-   
-   <!-- Slide 10: Thank You -->
-   <div class="slide" id="slide-10">
     <div class="title-slide">
      <div class="title-content">
       <div class="thank-you-content">
@@ -818,10 +704,8 @@
          đã lắng nghe!</h1>
        </div>
        <div class="contact-info">
-        <div class="contact-item"><span class="contact-icon">📧</span> vi.nln@kiotviet.com
-        </div>
-        <div class="contact-item"><span class="contact-icon">🏢</span> Phòng Đào Tạo - KiotViet
-        </div>
+        <div class="contact-item"><span class="contact-icon">📧</span> vi.nln@kiotviet.com</div>
+        <div class="contact-item"><span class="contact-icon">🏢</span> Phòng Đào Tạo - KiotViet</div>
        </div>
       </div>
      </div>
@@ -830,12 +714,11 @@
   </div>
   
   <!-- Navigation -->
-  <div class="navigation"><button class="nav-btn" id="prev-btn" onclick="previousSlide()">Trước</button> <button class="nav-btn" id="next-btn" onclick="nextSlide()">Tiếp</button>
-  </div>
+  <div class="navigation"><button class="nav-btn" id="prev-btn" onclick="previousSlide()">Trước</button> <button class="nav-btn" id="next-btn" onclick="nextSlide()">Tiếp</button></div>
   
   <script>
         let currentSlide = 1;
-        const totalSlides = 10;
+        const totalSlides = 9; // Updated total slides
         
         // --- DỮ LIỆU ĐÃ CẬP NHẬT ĐẦY ĐỦ CÁC THÁNG ---
         const reportData = {
@@ -952,6 +835,7 @@
             });
             
             indicators.textContent = currentSlide;
+            document.getElementById('total-slides').textContent = totalSlides;
             
             document.getElementById('prev-btn').disabled = currentSlide === 1;
             document.getElementById('next-btn').disabled = currentSlide === totalSlides;
@@ -1009,4 +893,3 @@
     </script>
  </body>
 </html>
-
